@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Survive The Maze</string>
+    <string name="button_volver">Volver</string>
+    <string name="boton_EmpezarJuego">Empezar juego</string>
+    <string name="boton_opciones">Opciones</string>
+    <string name="boton_records">Récords</string>
+    <string name="boton_creditos">Créditos</string>
+    <string name="boton_jugarOtraVez">Volver a Jugar</string>
+    <string name="boton_cambiarIdioma">Cambiar Idioma</string>
+    <string name="boton_musica">Activar/Desactivar música</string>
+    <string name="boton_sonido">Activat/Desactivar sonido</string>
+    <string name="nivel1">Nivel 1</string>
+    <string name="esp">Español</string>
+    <string name="eng">Inglés</string>
+    <string name="activar_desactivar">Activar/Desactivar</string>
+    <string name="musica">música</string>
+    <string name="sonido">sonido</string>
+    <string name="vibracion">vibración</string>
+</resources>
