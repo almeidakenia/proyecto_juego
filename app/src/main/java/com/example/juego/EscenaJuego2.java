@@ -299,12 +299,8 @@ public class EscenaJuego2 extends Escenas {
             int rangoX = getAnchoPantalla()/16*2;
             int rangoY = getAltoPantalla()/32*2;
 
-//            int distanciaX = getAnchoPantalla()/16*6;
             int distanciaX = getAnchoPantalla()/16*3;
-//            int distanciaY = getAltoPantalla()/32*6;
             int distanciaY = getAltoPantalla()/32*3;
-
-            Log.i("JUEGO", "INICIAL: "+xInicial+","+yInicial+" FINAL: "+xFinal+", "+yFinal);
 
             if(yFinal >= yInicial && yFinal <= yInicial + rangoY || yFinal <= yInicial && yFinal >= yInicial - rangoY){
                 if(xFinal > xInicial && xFinal >= xInicial+distanciaX){ //DERECHA
@@ -351,14 +347,11 @@ public class EscenaJuego2 extends Escenas {
             gana = true;
             setDuracionPartida(count);
             SharedPreferences sp = context.getSharedPreferences("datos", Context.MODE_PRIVATE);
-//            Log.i("record 1", "actualizaFisica: "+(sp.getInt("r1", 0)));
-            if(sp.getInt("r1", 0) > count || sp.getInt("r1", 0) == 0){
+            if(sp.getInt("r2", 0) > count || sp.getInt("r2", 0) == 0){
                 SharedPreferences.Editor editor = sp.edit();
-                editor.putInt("r1", count);
+                editor.putInt("r2", count);
                 editor.commit();
-//                Log.i("record 2", "actualizaFisica: "+(sp.getInt("r1", 0)));
             }
-//            Log.i("record 3", "actualizaFisica: "+(sp.getInt("r1", 0)));
         }
 
         for(EnemigoMurcielago murcielago : murcielagos){

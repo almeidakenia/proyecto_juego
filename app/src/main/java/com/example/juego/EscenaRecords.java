@@ -11,6 +11,7 @@ public class EscenaRecords extends Escenas {
     private int numEscena=4;
     private Bitmap fondo;
     private int record1 = 0;
+    private int record2 = 0;
 
     public EscenaRecords(Context context, int numEscena, int anp, int alp) {
         super(context,  anp, alp, numEscena);
@@ -20,6 +21,8 @@ public class EscenaRecords extends Escenas {
 
         SharedPreferences sp = context.getSharedPreferences("datos", Context.MODE_PRIVATE);
         record1 = sp.getInt("r1", 0);
+        record2 = sp.getInt("r2", 0);
+
     }
 
     @Override
@@ -40,6 +43,8 @@ public class EscenaRecords extends Escenas {
 
         c.drawText("records "+numEscena,getAnchoPantalla()/2, getAltoPantalla()/20*2, getPaintBlanco());
 
-        c.drawText("nivel1".toString()+": "+record1,getAnchoPantalla()/2, getAltoPantalla()/32*13, getPaintBlanco());
+        c.drawText("Nivel 1: ".toString()+": "+record1,getAnchoPantalla()/2, getAltoPantalla()/32*13, getPaintBlanco());
+
+        c.drawText("Nivel 2: ".toString()+": "+record2,getAnchoPantalla()/2, getAltoPantalla()/32*17, getPaintBlanco());
     }
 }

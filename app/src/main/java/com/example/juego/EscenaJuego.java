@@ -25,26 +25,20 @@ import java.util.TimerTask;
 public class EscenaJuego extends Escenas {
     boolean pierde = false;
     boolean gana = false;
-
     SharedPreferences sp;
     SharedPreferences.Editor editor;
-
     Vibrator vibrador;
-
     Paint paintMagenta;
-
     private ArrayList<EnemigoMurcielago> murcielagos = new ArrayList<EnemigoMurcielago>();
-
     private EnemigoMurcielago murcielago, murcielago2;
     Bitmap imagenesMurcielago;
-
     private SoundPool efecto_sonido;
     private int sonidoWoosh;
     final private int maxSonidosSimultaneos = 1;
     private AudioManager audioManager;
-
-    private Rect menu2;
-    private Rect botonPlayAgain;
+    private Rect boton_volver_menu;
+    private Rect boton_volver_jugar;
+    private Rect boton_siguienteNivel;
     private Bitmap fondo;
     private int numEscena;
     private Bitmap bitmapPersonaje;
@@ -68,9 +62,7 @@ public class EscenaJuego extends Escenas {
     private int miAncho = getAnchoPantalla()/32;
     private int miAlto =    getAltoPantalla()/64;
     private int tamMuro=getAltoPantalla()/64*50-getAltoPantalla()/64*49;
-
     private Puerta puerta;
-
     Timer timer = new Timer();
     TimerTask task;
     int count = 0;
@@ -129,8 +121,9 @@ public class EscenaJuego extends Escenas {
         murcielagos.add(murcielago);
         murcielagos.add(murcielago2);
 
-        this.menu2 =new Rect(miAncho*7, miAlto*40, miAncho*25, miAlto*45);
-        this.botonPlayAgain = new Rect(miAncho*7, miAlto*28, miAncho*25, miAlto*33);
+        this.boton_volver_jugar = new Rect(miAncho*7, miAlto*25, miAncho*25, miAlto*30);
+        this.boton_siguienteNivel =new Rect(miAncho*7, miAlto*34, miAncho*25, miAlto*39);
+        this.boton_volver_menu = new Rect(miAncho*7, miAlto*43, miAncho*25, miAlto*48);
 
         timer = new Timer();
         task = new TimerTask() {
@@ -166,7 +159,6 @@ public class EscenaJuego extends Escenas {
             vibrador.vibrate(300);
         }
     }
-
 
     public void CreacionParedes(){
         //horizontal : RIGHT - LEFT         vertical: BUTTON - TOP
@@ -242,14 +234,16 @@ public class EscenaJuego extends Escenas {
         }
         if(!pierde){
             if(gana){
-                c.drawRect(new Rect(miAncho*3, miAlto*9, miAncho*29, miAlto*56),paintMagenta);
-                c.drawRect(new Rect(miAncho*5, miAlto*12, miAncho*27, miAlto*20),getPaintBlanco());
-                c.drawText("GANAAA ", miAncho*16, miAlto*16, getPaintNegro());
-                c.drawRect(botonPlayAgain, getPaintBlanco());
-                c.drawText("Volver a jugar", miAncho*16, miAlto*31, getPaintNegro());
-                c.drawRect(menu2, getPaintBlanco());
-                c.drawText("Volver al menú", miAncho*16, miAlto*43, getPaintNegro());
-                c.drawText("Tiempo: "+count+"Duración: "+getDuracionPartida(), miAncho*16, miAlto*52, getPaintNegro());
+                c.drawRect(new Rect(miAncho*3, miAlto*9, miAncho*29, miAlto*53),paintMagenta);
+                c.drawRect(new Rect(miAncho*5, miAlto*13, miAncho*27, miAlto*21),getPaintBlanco());
+                c.drawText("¡Has ganado!", miAncho*16, miAlto*17, getPaintNegro());
+                c.drawRect(boton_volver_jugar, getPaintBlanco());
+                c.drawText("Volver a jugar", miAncho*16, miAlto*28, getPaintNegro());
+                c.drawRect(boton_siguienteNivel, getPaintBlanco());
+                c.drawText("Siguiente nivel", miAncho*16, miAlto*37, getPaintNegro());
+                c.drawRect(boton_volver_menu, getPaintBlanco());
+                c.drawText("Volver al menú", miAncho*16, miAlto*46, getPaintNegro());
+//                c.drawText("Tiempo: "+count+"Duración: "+getDuracionPartida(), miAncho*16, miAlto*52, getPaintNegro());
             }else{
                 for(Pared pared : paredes){
                     pared.dibujar(c);
@@ -266,14 +260,13 @@ public class EscenaJuego extends Escenas {
             }
         }
         else{
-            c.drawRect(new Rect(miAncho*3, miAlto*9, miAncho*29, miAlto*56),paintMagenta);
-            c.drawRect(new Rect(miAncho*5, miAlto*12, miAncho*27, miAlto*20),getPaintBlanco());
-            c.drawText("PIERDE ", miAncho*16, miAlto*16, getPaintNegro());
-            c.drawRect(botonPlayAgain, getPaintBlanco());
+            c.drawRect(new Rect(miAncho*3, miAlto*11, miAncho*29, miAlto*49),paintMagenta);
+            c.drawRect(new Rect(miAncho*5, miAlto*15, miAncho*27, miAlto*23),getPaintBlanco());
+            c.drawText("¡Has perdido!", miAncho*16, miAlto*19, getPaintNegro());
+            c.drawRect(boton_volver_jugar, getPaintBlanco());
             c.drawText("Volver a jugar", miAncho*16, miAlto*31, getPaintNegro());
-            c.drawRect(menu2, getPaintBlanco());
-            c.drawText("Volver al menú", miAncho*16, miAlto*43, getPaintNegro());
-            c.drawText("Tiempo: "+count, miAncho*16, miAlto*52, getPaintNegro());
+            c.drawRect(boton_volver_menu, getPaintBlanco());
+            c.drawText("Volver al menú", miAncho*16, miAlto*41, getPaintNegro());
         }
     }
 
@@ -285,9 +278,12 @@ public class EscenaJuego extends Escenas {
 
                 if(!pierde){
                     if(gana){
-                        if (botonPlayAgain.contains(xInicial,yInicial)){
+                        if (boton_volver_jugar.contains(xInicial,yInicial)){
                             inicializa();
                             gana=false;
+                        }
+                        if (boton_siguienteNivel.contains(xInicial, yInicial)){
+                            return 7;
                         }
                     }else if (numEscena!=1){
                         if (getMenu().contains(xInicial,yInicial)){
@@ -295,7 +291,7 @@ public class EscenaJuego extends Escenas {
                         }
                     }
                 }else {
-                    if (botonPlayAgain.contains(xInicial,yInicial)){
+                    if (boton_volver_jugar.contains(xInicial,yInicial)){
                         inicializa();
                         pierde=false;
                     }
@@ -308,7 +304,7 @@ public class EscenaJuego extends Escenas {
 
                 if(pierde || gana){
                     if (numEscena!=1){
-                        if (menu2.contains(xInicial,yInicial)){
+                        if (boton_volver_menu.contains(xInicial,yInicial)){
                             return 1;
                         }
                     }
@@ -374,14 +370,10 @@ public class EscenaJuego extends Escenas {
             }
             gana = true;
             setDuracionPartida(count);
-
-//            Log.i("record 1", "actualizaFisica: "+(sp.getInt("r1", 0)));
             if(sp.getInt("r1", 0) > count || sp.getInt("r1", 0) == 0){
                 editor.putInt("r1", count);
                 editor.commit();
-//                Log.i("record 2", "actualizaFisica: "+(sp.getInt("r1", 0)));
             }
-//            Log.i("record 3", "actualizaFisica: "+(sp.getInt("r1", 0)));
         }
 
         for(EnemigoMurcielago murcielago : murcielagos){
@@ -399,6 +391,7 @@ public class EscenaJuego extends Escenas {
                 pierde = true;
             }
         }
+
         if(!pierde){
             for(EnemigoMurcielago murcielago : murcielagos){
                 murcielago.actualizaFisica();
@@ -463,6 +456,9 @@ public class EscenaJuego extends Escenas {
                     mab = false;
                 }
             }
+        }else{
+            this.boton_volver_jugar = new Rect(miAncho*7, miAlto*28, miAncho*25, miAlto*33);
+            this.boton_volver_menu = new Rect(miAncho*7, miAlto*38, miAncho*25, miAlto*43);
         }
         return 0;
     }

@@ -26,6 +26,12 @@ public class EscenaCreditos extends Escenas {
         }
         c.drawRect(getMenu(), getPaintBlanco());
         c.drawText("Volver", getAnchoPantalla()/8, getAltoPantalla()/40, getPaintNegro());
-        c.drawText("créditos "+numEscena,getAnchoPantalla()/2, getAltoPantalla()/20*2, getPaintBlanco());
+        c.drawText("Recursos", getAnchoPantalla()/2, getAltoPantalla()/20*3, getPaintBlanco());
+        c.drawText("Itch.io", getAnchoPantalla()/2, getAltoPantalla()/20*5, getPaintBlanco());
+        c.drawText("Canva", getAnchoPantalla()/2, getAltoPantalla()/20*7, getPaintBlanco());
+        c.drawText("Pixabay", getAnchoPantalla()/2, getAltoPantalla()/20*9, getPaintBlanco());
+        c.drawText("Agradecimientos", getAnchoPantalla()/2, getAltoPantalla()/20*12, getPaintBlanco());
+        c.drawText("Javier Conde", getAnchoPantalla()/2, getAltoPantalla()/20*14, getPaintBlanco());
+        c.drawText("Alejandro Carballo", getAnchoPantalla()/2, getAltoPantalla()/20*16, getPaintBlanco());
     }
 }

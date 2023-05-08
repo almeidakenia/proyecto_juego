@@ -67,7 +67,7 @@ public class EscenaMenu extends Escenas {
             case MotionEvent.ACTION_DOWN:
                 if (aux!=this.numEscena && aux!=-1) return aux;
 
-                if (op1.contains(x,y))return 2;
+                if (op1.contains(x,y))return 7;
                 else if (op2.contains(x,y))return 3;
                 else if (op3.contains(x,y))return 4;
                 else if (op4.contains(x,y))return 5;

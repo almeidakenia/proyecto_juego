@@ -114,6 +114,7 @@ public class JuegoSV extends SurfaceView implements SurfaceHolder.Callback {
                 case 5: escenaActual=new EscenaCreditos(context, 5, anchoPantalla, altoPantalla); break;
                 //case 6: escenaActual=new EscenaGameOver(context, 6, anchoPantalla,altoPantalla); break;
                 case 6: escenaActual=new EscenaIdiomas(context, 6, anchoPantalla, altoPantalla); break;
+                case 7: escenaActual=new EscenaJuego2(context, 7, anchoPantalla,altoPantalla); break;
             }
         }
     }
