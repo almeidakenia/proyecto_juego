@@ -17,4 +17,13 @@
     <string name="musica">música</string>
     <string name="sonido">sonido</string>
     <string name="vibracion">vibración</string>
+    <string name="pierde">Has perdido</string>
+    <string name="button_volver_2">Volver al menú</string>
+    <string name="gana">¡Has ganado!</string>
+    <string name="button_siguiente_Nivel">Siguiente Nivel</string>
+    <string name="tiempo">Tiempo de juego</string>
+    <string name="recursos">Recursos</string>
+    <string name="agradecimientos">Agradecimientos</string>
+    <string name="nivel2">Nivel 2</string>
+    <string name="tutorial">Tutorial</string>
 </resources>

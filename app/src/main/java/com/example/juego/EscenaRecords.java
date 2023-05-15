@@ -12,22 +12,21 @@ public class EscenaRecords extends Escenas {
     private Bitmap fondo;
     private int record1 = 0;
     private int record2 = 0;
+    private Context context;
 
     public EscenaRecords(Context context, int numEscena, int anp, int alp) {
         super(context,  anp, alp, numEscena);
         this.numEscena=numEscena;
+        this.context=context;
         fondo = BitmapFactory.decodeResource(context.getResources(), R.drawable.fondo_movil);
         fondo = Bitmap.createScaledBitmap(fondo, getAnchoPantalla(), getAltoPantalla(), true);
-
         SharedPreferences sp = context.getSharedPreferences("datos", Context.MODE_PRIVATE);
         record1 = sp.getInt("r1", 0);
         record2 = sp.getInt("r2", 0);
-
     }
 
     @Override
     public int actualizaFisica() {
-
         return 0;
     }
 
@@ -39,12 +38,9 @@ public class EscenaRecords extends Escenas {
             c.drawColor(Color.MAGENTA);
         }
         c.drawRect(getMenu(), getPaintBlanco());
-        c.drawText("Back".toString(), getAnchoPantalla()/8, getAltoPantalla()/40, getPaintNegro());
-
-        c.drawText("records "+numEscena,getAnchoPantalla()/2, getAltoPantalla()/20*2, getPaintBlanco());
-
-        c.drawText("Nivel 1: ".toString()+": "+record1,getAnchoPantalla()/2, getAltoPantalla()/32*13, getPaintBlanco());
-
-        c.drawText("Nivel 2: ".toString()+": "+record2,getAnchoPantalla()/2, getAltoPantalla()/32*17, getPaintBlanco());
+        c.drawText(context.getText(R.string.button_volver).toString(), getAnchoPantalla()/8, getAltoPantalla()/40, getPaintNegro());
+        c.drawText(context.getText(R.string.boton_records).toString(),getAnchoPantalla()/2, getAltoPantalla()/20*4, getPaint_azul_claro());
+        c.drawText(context.getText(R.string.nivel1).toString()+": "+record1,getAnchoPantalla()/2, getAltoPantalla()/32*13, getPaintBlanco());
+        c.drawText(context.getText(R.string.nivel2).toString()+": "+record2,getAnchoPantalla()/2, getAltoPantalla()/32*17, getPaintBlanco());
     }
 }

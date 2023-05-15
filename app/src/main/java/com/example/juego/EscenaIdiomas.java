@@ -63,14 +63,13 @@ public class EscenaIdiomas extends Escenas {
             c.drawColor(Color.MAGENTA);
         }
         c.drawRect(getMenu(), getPaintBlanco());
-        c.drawText("Back".toString(), getAnchoPantalla()/8, getAltoPantalla()/40, getPaintNegro());
-        c.drawText("créditos "+numEscena,getAnchoPantalla()/2, getAltoPantalla()/20*2, getPaintBlanco());
+        c.drawText(context.getText(R.string.button_volver).toString(), getAnchoPantalla()/8, getAltoPantalla()/40, getPaintNegro());
 
         c.drawBitmap(imagen_ES, x_imagenes, y_imagenES, null);
-        c.drawText("Spanish".toString(), x_imagenes+anchoImagen+getAnchoPantalla()/32*6, y_imagenES+altoImagen/2, getPaintBlanco());
+        c.drawText(context.getText(R.string.esp).toString(), x_imagenes+anchoImagen+getAnchoPantalla()/32*6, y_imagenES+altoImagen/2, getPaintBlanco());
 
         c.drawBitmap(imagen_EN, x_imagenes, y_imagenEN, null);
-        c.drawText("English".toString(), x_imagenes+anchoImagen+getAnchoPantalla()/32*6, y_imagenEN+altoImagen/2, getPaintBlanco());
+        c.drawText(context.getText(R.string.eng).toString(), x_imagenes+anchoImagen+getAnchoPantalla()/32*6, y_imagenEN+altoImagen/2, getPaintBlanco());
 
 //        getPaintBlanco().setStyle(Paint.Style.STROKE);
 //        c.drawRect(hitboxES, getPaintBlanco());

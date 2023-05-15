@@ -1,40 +1,50 @@
 package com.example.juego;
 
 
-    import android.content.Context;
-    import android.content.SharedPreferences;
-    import android.graphics.Bitmap;
-    import android.graphics.BitmapFactory;
-    import android.graphics.Canvas;
-    import android.graphics.Color;
-    import android.graphics.Paint;
-    import android.graphics.Rect;
-    import android.os.Build;
-    import android.os.VibrationEffect;
-    import android.os.Vibrator;
-    import android.util.Log;
-    import android.view.MotionEvent;
-    import android.view.View;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Rect;
+import android.media.AudioAttributes;
+import android.media.AudioManager;
+import android.media.SoundPool;
+import android.os.Build;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
+import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
 
-    import java.util.ArrayList;
-    import java.util.Timer;
-    import java.util.TimerTask;
+import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class EscenaJuego2 extends Escenas {
     boolean pierde = false;
     boolean gana = false;
 
     int record;
+    private AudioManager audioManager;
+    final private int maxSonidosSimultaneos = 1;
+    private SoundPool efecto_sonido;
+    private int sonidoWoosh;
 
     Vibrator vibrador;
 
+    Paint paint_boton;
+
     Paint paintMagenta;
+    SharedPreferences sp;
+    SharedPreferences.Editor editor;
 
     private ArrayList<EnemigoMurcielago> murcielagos = new ArrayList<EnemigoMurcielago>();
 
     private EnemigoMurcielago murcielago, murcielago2;
     Bitmap imagenesMurcielago;
-
     private Rect menu2;
     private Rect botonPlayAgain;
     private Bitmap fondo;
@@ -69,9 +79,6 @@ public class EscenaJuego2 extends Escenas {
     int minutos = 0;
     int segundos = 0;
 
-//    public MediaPlayer mediaPlayer;
-//    private AudioManager audioManager;
-
     public Pared addParedH(Bitmap bitmapColor, int x, int y, int ancho){
         return new Pared(bitmapColor,new Rect(x, y, x+ancho, y+tamMuro));
     }
@@ -97,14 +104,35 @@ public class EscenaJuego2 extends Escenas {
         mab = false;
         moviendo = false;
 
+        sp = context.getSharedPreferences("datos", Context.MODE_PRIVATE);
+        editor = sp.edit();
 
-        personaje = new Personaje(getAnchoPantalla(), getAltoPantalla(), miAncho*20, miAlto*58,40);
-        puerta = new Puerta(getAnchoPantalla(), getAltoPantalla(), miAncho*20, miAlto);
+//        editor.putBoolean("nivel1", false);
+//        editor.putBoolean("nivel2", true);
+//        editor.commit();
+
+        audioManager=(AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
+
+        if ((android.os.Build.VERSION.SDK_INT) >= 21) {
+            SoundPool.Builder spb=new SoundPool.Builder();
+            spb.setAudioAttributes(new AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_MEDIA)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION).build());
+            spb.setMaxStreams(maxSonidosSimultaneos);
+            this.efecto_sonido=spb.build();
+        } else {
+            this.efecto_sonido=new SoundPool(maxSonidosSimultaneos, AudioManager.STREAM_MUSIC, 0);
+        }
+        sonidoWoosh=efecto_sonido.load(context, R.raw.woosh,1);
+
+
+        personaje = new Personaje(context, getAnchoPantalla(), getAltoPantalla(), miAncho*3, miAlto*59,40);
+
+        puerta = new Puerta(context, getAnchoPantalla(), getAltoPantalla(), miAncho*27, miAlto*2, miAncho*29, miAlto*4);
         imagenesMurcielago = BitmapFactory.decodeResource(context.getResources(), R.drawable.enemigo_bat);
 
         murcielagos.clear();
-        murcielago = new EnemigoMurcielago(context, imagenesMurcielago, getAnchoPantalla(), getAltoPantalla(), miAncho*3, miAlto*52, 5);
-        murcielago2 = new EnemigoMurcielago(context, imagenesMurcielago, getAnchoPantalla(), getAltoPantalla(), miAncho*10, miAlto*25, 6);
+        murcielago = new EnemigoMurcielago(context, imagenesMurcielago, getAnchoPantalla(), getAltoPantalla(), miAncho*5, miAlto*9, 9);
+        murcielago2 = new EnemigoMurcielago(context, imagenesMurcielago, getAnchoPantalla(), getAltoPantalla(), miAncho*5, miAlto*19, 6);
         murcielagos.add(murcielago);
         murcielagos.add(murcielago2);
 
@@ -133,9 +161,14 @@ public class EscenaJuego2 extends Escenas {
         paintMagenta.setColor(Color.MAGENTA);
         paintMagenta.setAlpha(200);
 
+        int colorInt = Color.parseColor("#763B6E");
+        this.paint_boton = new Paint();
+        paint_boton.setColor(colorInt);
+        paint_boton.setAlpha(150);
+        getPaintBlanco().setTextSize(getAnchoPantalla()/32);
+
         CreacionParedes();
         vibrador = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-
     }
 
     public void onClickVibracion(){
@@ -146,56 +179,57 @@ public class EscenaJuego2 extends Escenas {
         }
     }
 
-
     public void CreacionParedes(){
-        //horizontal : RIGHT - LEFT         vertical: BUTTON - TOP
+//        horizontal : RIGHT - LEFT         vertical: BUTTON - TOP
         paredes.clear();
-        paredes.add( addParedH(bitmapColor, miAncho*1,  miAlto*49, miAncho *6));
-        paredes.add( addParedV(bitmapColor, miAncho*1,  miAlto*49, miAlto *12));
-        paredes.add( addParedH(bitmapColor, miAncho*1,  miAlto*60, miAncho *9));
-        paredes.add( addParedV(bitmapColor, miAncho*10, miAlto*52, miAlto*9));
-        paredes.add( addParedH(bitmapColor, miAncho*10, miAlto*52, miAncho*4));     //5
-        paredes.add( addParedV(bitmapColor, miAncho*14, miAlto*52, miAlto*3));
-        paredes.add( addParedH(bitmapColor, miAncho*14, miAlto*54, miAncho *7));
-        paredes.add( addParedV(bitmapColor, miAncho*21, miAlto*54, miAlto*4));
-        paredes.add( addParedH(bitmapColor, miAncho*19, miAlto*57, miAncho *2));
-        paredes.add( addParedV(bitmapColor, miAncho*19, miAlto*57, miAlto*6));        //10
-        paredes.add( addParedH(bitmapColor, miAncho*19, miAlto*62, miAncho *9));
-        paredes.add( addParedV(bitmapColor, miAncho*28, miAlto*49, miAlto*14));
-        /*paredes.add( addParedH(bitmapColor, miAncho*19, miAlto*49, miAncho *9));
-        paredes.add( addParedV(bitmapColor, miAncho*19, miAlto*49, miAlto*3));
-        paredes.add( addParedH(bitmapColor, miAncho*17, miAlto*51, miAncho *2));    //15
-        paredes.add( addParedV(bitmapColor, miAncho*17, miAlto*49, miAlto*3));*/
-        paredes.add( addParedH(bitmapColor, miAncho*10, miAlto*49, miAncho*18));
-        paredes.add( addParedV(bitmapColor, miAncho*10, miAlto*43, miAlto*6));
-        paredes.add( addParedH(bitmapColor, miAncho*10, miAlto*43, miAncho*2));
-        paredes.add( addParedV(bitmapColor, miAncho*12, miAlto*43, miAlto*2));     //20
-        paredes.add( addParedH(bitmapColor, miAncho*12, miAlto*45, miAncho*19));
-        paredes.add( addParedV(bitmapColor, miAncho*7, miAlto*40, miAlto*10));
-        paredes.add( addParedH(bitmapColor, miAncho*7, miAlto*40, miAncho*8));
-        paredes.add( addParedV(bitmapColor, miAncho*15, miAlto*40, miAlto*3));
-        paredes.add( addParedH(bitmapColor, miAncho*15, miAlto*42, miAncho*14));    //25
-        paredes.add( addParedV(bitmapColor, miAncho*31, miAlto*32, miAlto*14));
-        paredes.add( addParedV(bitmapColor, miAncho*28, miAlto*39, miAncho*4));
-        paredes.add( addParedH(bitmapColor, miAncho*19, miAlto*39, miAncho*10));
-        paredes.add( addParedV(bitmapColor, miAncho*19, miAlto*32, miAlto*8));
-        paredes.add( addParedH(bitmapColor, miAncho*26, miAlto*32, miAncho*5)); //30
-        paredes.add( addParedV(bitmapColor, miAncho*26, miAlto*29, miAlto*4));
-        paredes.add( addParedH(bitmapColor, miAncho*17, miAlto*29, miAncho*9));
-        paredes.add( addParedH(bitmapColor, miAncho*9, miAlto*32, miAncho*10));
-        paredes.add( addParedV(bitmapColor, miAncho*9, miAlto*13, miAlto*20));
-        paredes.add( addParedV(bitmapColor, miAncho*17, miAlto*23, miAlto*7)); //35
-        paredes.add( addParedH(bitmapColor, miAncho*12, miAlto*23, miAncho*5));
-        paredes.add( addParedV(bitmapColor, miAncho*12, miAlto*16, miAlto*8));
-        paredes.add( addParedH(bitmapColor, miAncho*12, miAlto*16, miAncho*7));
-        paredes.add( addParedH(bitmapColor, miAncho*9, miAlto*13, miAncho*7));
-        paredes.add( addParedV(bitmapColor, miAncho*19, miAlto*10, miAlto*7)); //40
-        paredes.add( addParedV(bitmapColor, miAncho*16, miAlto*7, miAlto*7));
-        paredes.add( addParedH(bitmapColor, miAncho*19, miAlto*10, miAncho*3));
-        paredes.add( addParedH(bitmapColor, miAncho*16, miAlto*7, miAncho*3));
-        paredes.add( addParedV(bitmapColor, miAncho*19, 0, miAlto*8));
-        paredes.add( addParedV(bitmapColor, miAncho*22, 0, miAlto*11)); //45
-        paredes.add( addParedH(bitmapColor, miAncho*19, 0, miAncho*3));
+        paredes.add( addParedH(bitmapColor, miAncho*1,  miAlto*52, miAncho *11));
+        paredes.add( addParedV(bitmapColor, miAncho*1,  miAlto*52, miAlto *10));
+        paredes.add( addParedH(bitmapColor, miAncho*1,  miAlto*61, miAncho *11));
+        paredes.add( addParedV(bitmapColor, miAncho*12,  miAlto*57, miAlto *5));
+        paredes.add( addParedH(bitmapColor, miAncho*12,  miAlto*57, miAncho *3));
+        paredes.add( addParedV(bitmapColor, miAncho*15,  miAlto*57, miAlto *5));
+        paredes.add( addParedH(bitmapColor, miAncho*15,  miAlto*61, miAncho *15));
+        paredes.add( addParedV(bitmapColor, miAncho*30,  miAlto*48, miAlto *14));
+        paredes.add( addParedH(bitmapColor, miAncho*15,  miAlto*48, miAncho *15));
+        paredes.add( addParedV(bitmapColor, miAncho*12,  miAlto*49, miAlto *4));
+        paredes.add( addParedV(bitmapColor, miAncho*15,  miAlto*46, miAlto *3));
+        paredes.add( addParedH(bitmapColor, miAncho*4,  miAlto*46, miAncho *11));
+        paredes.add( addParedH(bitmapColor, miAncho*1,  miAlto*49, miAncho *11));
+        paredes.add( addParedV(bitmapColor, miAncho*1,  miAlto*35, miAlto *15));
+        paredes.add( addParedV(bitmapColor, miAncho*4,  miAlto*38, miAlto *9));
+        paredes.add( addParedH(bitmapColor, miAncho*1,  miAlto*35, miAncho *9));
+        paredes.add( addParedH(bitmapColor, miAncho*4,  miAlto*38, miAncho *3));
+        paredes.add( addParedV(bitmapColor, miAncho*10,  miAlto*35, miAlto *6));
+        paredes.add( addParedV(bitmapColor, miAncho*7,  miAlto*38, miAlto *6));
+        paredes.add( addParedH(bitmapColor, miAncho*10,  miAlto*40, miAncho *3));
+        paredes.add( addParedH(bitmapColor, miAncho*7,  miAlto*43, miAncho *9));
+        paredes.add( addParedV(bitmapColor, miAncho*13,  miAlto*30, miAlto *11));
+        paredes.add( addParedV(bitmapColor, miAncho*16,  miAlto*33, miAlto *11));
+        paredes.add( addParedH(bitmapColor, miAncho*13,  miAlto*30, miAncho *6));
+        paredes.add( addParedH(bitmapColor, miAncho*16,  miAlto*33, miAncho *3));
+        paredes.add( addParedV(bitmapColor, miAncho*19,  miAlto*33, miAlto *11));
+        paredes.add( addParedH(bitmapColor, miAncho*19,  miAlto*43, miAncho *12));
+        paredes.add( addParedV(bitmapColor, miAncho*31,  miAlto*27, miAlto *17));
+        paredes.add( addParedH(bitmapColor, miAncho*22,  miAlto*27, miAncho *9));
+        paredes.add( addParedV(bitmapColor, miAncho*19,  miAlto*25, miAlto *6));
+        paredes.add( addParedV(bitmapColor, miAncho*22,  miAlto*25, miAlto *3));
+        paredes.add( addParedH(bitmapColor, miAncho*4,  miAlto*25, miAncho *15));
+        paredes.add( addParedH(bitmapColor, miAncho*22,  miAlto*25, miAncho *4));
+        paredes.add( addParedV(bitmapColor, miAncho*4,  miAlto*6, miAlto *20));
+        paredes.add( addParedV(bitmapColor, miAncho*26,  miAlto*18, miAlto *8));
+        paredes.add( addParedH(bitmapColor, miAncho*7,  miAlto*18, miAncho *19)); //
+        paredes.add( addParedV(bitmapColor, miAncho*7,  miAlto*14, miAlto *5));
+        paredes.add( addParedH(bitmapColor, miAncho*4,  miAlto*6, miAncho *9));
+        paredes.add( addParedH(bitmapColor, miAncho*7,  miAlto*14, miAncho *6));
+        paredes.add( addParedV(bitmapColor, miAncho*13,  miAlto*4, miAlto *3));
+        paredes.add( addParedV(bitmapColor, miAncho*13,  miAlto*14, miAlto *3)); //
+        paredes.add( addParedH(bitmapColor, miAncho*13,  miAlto*4, miAncho *13));  //esta de arriba
+        paredes.add( addParedH(bitmapColor, miAncho*13,  miAlto*16, miAncho *9)); //
+        paredes.add( addParedV(bitmapColor, miAncho*22,  miAlto*7, miAlto *10));
+        paredes.add( addParedH(bitmapColor, miAncho*22,  miAlto*7, miAncho *7)); //
+        paredes.add( addParedV(bitmapColor, miAncho*26,  miAlto*1, miAlto *4));
+        paredes.add( addParedV(bitmapColor, miAncho*29,  miAlto*1, miAlto *7));
+        paredes.add( addParedH(bitmapColor, miAncho*26,  miAlto, miAncho *3)); //
     }
 
     public EscenaJuego2(Context context, int numEscena, int anp, int alp) {
@@ -223,12 +257,12 @@ public class EscenaJuego2 extends Escenas {
             if(gana){
                 c.drawRect(new Rect(miAncho*3, miAlto*9, miAncho*29, miAlto*56),paintMagenta);
                 c.drawRect(new Rect(miAncho*5, miAlto*12, miAncho*27, miAlto*20),getPaintBlanco());
-                c.drawText("GANAAA ", miAncho*16, miAlto*16, getPaintNegro());
+                c.drawText(context.getText(R.string.gana).toString(), miAncho*16, miAlto*16, getPaintNegro());
                 c.drawRect(botonPlayAgain, getPaintBlanco());
-                c.drawText("Volver a jugar", miAncho*16, miAlto*31, getPaintNegro());
+                c.drawText(context.getText(R.string.boton_jugarOtraVez).toString(), miAncho*16, miAlto*31, getPaintNegro());
                 c.drawRect(menu2, getPaintBlanco());
-                c.drawText("Volver al menú", miAncho*16, miAlto*43, getPaintNegro());
-                c.drawText("Tiempo: "+count+"Duración: "+getDuracionPartida(), miAncho*16, miAlto*52, getPaintNegro());
+                c.drawText(context.getText(R.string.button_volver_2).toString(), miAncho*16, miAlto*43, getPaintNegro());
+                c.drawText(context.getText(R.string.tiempo).toString()+": "+count, miAncho*16, miAlto*52, getPaintNegro());
             }else{
                 for(Pared pared : paredes){
                     pared.dibujar(c);
@@ -238,21 +272,21 @@ public class EscenaJuego2 extends Escenas {
                 }
                 puerta.dibujar(c);
                 personaje.dibujar(c);
-                c.drawRect(getMenu(), getPaintBlanco());
-                c.drawText("Volver", getAnchoPantalla()/8, getAltoPantalla()/40, getPaintNegro());
+                c.drawRect(getMenu(), paint_boton);
+                c.drawText(context.getText(R.string.button_volver).toString(), getAnchoPantalla()/8, getAltoPantalla()/40, getPaintBlanco());
                 String formattedString = String.format("%02d:%02d", minutos, segundos);
-                c.drawText(formattedString, miAncho*5, miAlto*6, getPaintBlanco());
+                c.drawText(formattedString, miAncho*5, miAlto*5, getPaintBlanco());
             }
         }
         else{
             c.drawRect(new Rect(miAncho*3, miAlto*9, miAncho*29, miAlto*56),paintMagenta);
             c.drawRect(new Rect(miAncho*5, miAlto*12, miAncho*27, miAlto*20),getPaintBlanco());
-            c.drawText("PIERDE ", miAncho*16, miAlto*16, getPaintNegro());
+            c.drawText(context.getText(R.string.pierde).toString(), miAncho*16, miAlto*16, getPaintNegro());
             c.drawRect(botonPlayAgain, getPaintBlanco());
-            c.drawText("Volver a jugar", miAncho*16, miAlto*31, getPaintNegro());
+            c.drawText(context.getText(R.string.boton_jugarOtraVez).toString(), miAncho*16, miAlto*31, getPaintNegro());
             c.drawRect(menu2, getPaintBlanco());
-            c.drawText("Volver al menú", miAncho*16, miAlto*43, getPaintNegro());
-            c.drawText("Tiempo: "+count, miAncho*16, miAlto*52, getPaintNegro());
+            c.drawText(context.getText(R.string.button_volver_2).toString(), miAncho*16, miAlto*43, getPaintNegro());
+            c.drawText(context.getText(R.string.tiempo).toString()+": "+count, miAncho*16, miAlto*52, getPaintNegro());
         }
     }
 
@@ -402,6 +436,12 @@ public class EscenaJuego2 extends Escenas {
                 }
 
                 if (personaje.colisiona(pared.getHitbox())) {
+                    if(sp.getBoolean("sonido_on", true) == true){
+                        audioManager.playSoundEffect(AudioManager.FX_KEYPRESS_SPACEBAR);
+                        int v= audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+                        efecto_sonido.play(sonidoWoosh,v,v,1,0,1);
+                    }
+
                     if (mi) {
                         personaje.setX(pared.getHitbox().right);
                         personaje.actualizaRect();
@@ -429,5 +469,3 @@ public class EscenaJuego2 extends Escenas {
         return 0;
     }
 }
-
-

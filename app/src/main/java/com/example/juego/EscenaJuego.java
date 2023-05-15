@@ -23,6 +23,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class EscenaJuego extends Escenas {
+    Paint paint_boton;
     boolean pierde = false;
     boolean gana = false;
     SharedPreferences sp;
@@ -41,7 +42,6 @@ public class EscenaJuego extends Escenas {
     private Rect boton_siguienteNivel;
     private Bitmap fondo;
     private int numEscena;
-    private Bitmap bitmapPersonaje;
     private Bitmap bitmapColor;
     private Personaje personaje;
     private boolean md = false;
@@ -97,6 +97,9 @@ public class EscenaJuego extends Escenas {
         sp = context.getSharedPreferences("datos", Context.MODE_PRIVATE);
         editor = sp.edit();
 
+        editor.putBoolean("nivel1", true);
+        editor.commit();
+
         audioManager=(AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
 
         if ((android.os.Build.VERSION.SDK_INT) >= 21) {
@@ -108,23 +111,18 @@ public class EscenaJuego extends Escenas {
         } else {
             this.efecto_sonido=new SoundPool(maxSonidosSimultaneos, AudioManager.STREAM_MUSIC, 0);
         }
-
         sonidoWoosh=efecto_sonido.load(context, R.raw.woosh,1);
-
-        personaje = new Personaje(getAnchoPantalla(), getAltoPantalla(), miAncho*20, miAlto*58,40);
-        puerta = new Puerta(getAnchoPantalla(), getAltoPantalla(), miAncho*20, miAlto);
+        personaje = new Personaje(context,getAnchoPantalla(), getAltoPantalla(), miAncho*20, miAlto*58,40);
+        puerta = new Puerta(context, getAnchoPantalla(), getAltoPantalla(), miAncho*20, miAlto, miAncho*22, miAlto*3);
         imagenesMurcielago = BitmapFactory.decodeResource(context.getResources(), R.drawable.enemigo_bat);
-
         murcielagos.clear();
         murcielago = new EnemigoMurcielago(context, imagenesMurcielago, getAnchoPantalla(), getAltoPantalla(), miAncho*3, miAlto*52, 5);
         murcielago2 = new EnemigoMurcielago(context, imagenesMurcielago, getAnchoPantalla(), getAltoPantalla(), miAncho*10, miAlto*25, 6);
         murcielagos.add(murcielago);
         murcielagos.add(murcielago2);
-
         this.boton_volver_jugar = new Rect(miAncho*7, miAlto*25, miAncho*25, miAlto*30);
         this.boton_siguienteNivel =new Rect(miAncho*7, miAlto*34, miAncho*25, miAlto*39);
         this.boton_volver_menu = new Rect(miAncho*7, miAlto*43, miAncho*25, miAlto*48);
-
         timer = new Timer();
         task = new TimerTask() {
             public void run() {
@@ -146,6 +144,12 @@ public class EscenaJuego extends Escenas {
         paintMagenta = new Paint();
         paintMagenta.setColor(Color.MAGENTA);
         paintMagenta.setAlpha(200);
+
+        int colorInt = Color.parseColor("#763B6E");
+        this.paint_boton = new Paint();
+        paint_boton.setColor(colorInt);
+        paint_boton.setAlpha(150);
+        getPaintBlanco().setTextSize(getAnchoPantalla()/32);
 
         CreacionParedes();
         vibrador = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
@@ -236,14 +240,14 @@ public class EscenaJuego extends Escenas {
             if(gana){
                 c.drawRect(new Rect(miAncho*3, miAlto*9, miAncho*29, miAlto*53),paintMagenta);
                 c.drawRect(new Rect(miAncho*5, miAlto*13, miAncho*27, miAlto*21),getPaintBlanco());
-                c.drawText("¡Has ganado!", miAncho*16, miAlto*17, getPaintNegro());
+                c.drawText(context.getText(R.string.gana).toString(), miAncho*16, miAlto*17, getPaintNegro());
                 c.drawRect(boton_volver_jugar, getPaintBlanco());
-                c.drawText("Volver a jugar", miAncho*16, miAlto*28, getPaintNegro());
+                c.drawText(context.getText(R.string.boton_jugarOtraVez).toString(), miAncho*16, miAlto*28, getPaintNegro());
                 c.drawRect(boton_siguienteNivel, getPaintBlanco());
-                c.drawText("Siguiente nivel", miAncho*16, miAlto*37, getPaintNegro());
+                c.drawText(context.getText(R.string.button_siguiente_Nivel).toString(), miAncho*16, miAlto*37, getPaintNegro());
                 c.drawRect(boton_volver_menu, getPaintBlanco());
-                c.drawText("Volver al menú", miAncho*16, miAlto*46, getPaintNegro());
-//                c.drawText("Tiempo: "+count+"Duración: "+getDuracionPartida(), miAncho*16, miAlto*52, getPaintNegro());
+                c.drawText(context.getText(R.string.button_volver_2).toString(), miAncho*16, miAlto*46, getPaintNegro());
+                c.drawText(context.getText(R.string.tiempo).toString()+": "+count, miAncho*16, miAlto*52, getPaintNegro());
             }else{
                 for(Pared pared : paredes){
                     pared.dibujar(c);
@@ -253,20 +257,23 @@ public class EscenaJuego extends Escenas {
                 }
                 puerta.dibujar(c);
                 personaje.dibujar(c);
-                c.drawRect(getMenu(), getPaintBlanco());
-                c.drawText("Volver", getAnchoPantalla()/8, getAltoPantalla()/40, getPaintNegro());
+                c.drawRect(getMenu(), paint_boton);
+                c.drawText(context.getText(R.string.button_volver).toString(), getAnchoPantalla()/8, getAltoPantalla()/40, getPaintBlanco());
                 String formattedString = String.format("%02d:%02d", minutos, segundos);
-                c.drawText(formattedString, miAncho*5, miAlto*6, getPaintBlanco());
+                c.drawText(formattedString, miAncho*2, miAlto*6, getPaintBlanco());
             }
         }
         else{
             c.drawRect(new Rect(miAncho*3, miAlto*11, miAncho*29, miAlto*49),paintMagenta);
             c.drawRect(new Rect(miAncho*5, miAlto*15, miAncho*27, miAlto*23),getPaintBlanco());
-            c.drawText("¡Has perdido!", miAncho*16, miAlto*19, getPaintNegro());
+//            c.drawText("¡Has perdido!", miAncho*16, miAlto*19, getPaintNegro());
+            c.drawText(context.getText(R.string.pierde).toString(), miAncho*16, miAlto*19, getPaintNegro());
             c.drawRect(boton_volver_jugar, getPaintBlanco());
-            c.drawText("Volver a jugar", miAncho*16, miAlto*31, getPaintNegro());
+//            c.drawText("Volver a jugar", miAncho*16, miAlto*31, getPaintNegro());
+            c.drawText(context.getText(R.string.boton_jugarOtraVez).toString(), miAncho*16, miAlto*31, getPaintNegro());
             c.drawRect(boton_volver_menu, getPaintBlanco());
-            c.drawText("Volver al menú", miAncho*16, miAlto*41, getPaintNegro());
+//            c.drawText("Volver al menú", miAncho*16, miAlto*41, getPaintNegro());
+            c.drawText(context.getText(R.string.button_volver_2).toString(), miAncho*16, miAlto*41, getPaintNegro());
         }
     }
 
@@ -278,12 +285,16 @@ public class EscenaJuego extends Escenas {
 
                 if(!pierde){
                     if(gana){
+                        editor.putBoolean("nivel1", false);
+                        editor.putBoolean("nivel2", true);
+                        editor.commit();
+
                         if (boton_volver_jugar.contains(xInicial,yInicial)){
                             inicializa();
                             gana=false;
                         }
                         if (boton_siguienteNivel.contains(xInicial, yInicial)){
-                            return 7;
+                            return 8;
                         }
                     }else if (numEscena!=1){
                         if (getMenu().contains(xInicial,yInicial)){
@@ -296,7 +307,7 @@ public class EscenaJuego extends Escenas {
                         pierde=false;
                     }
                 }
-            break;
+                break;
 
             case MotionEvent.ACTION_UP:
                 xFinal = (int) event.getX();
@@ -309,7 +320,7 @@ public class EscenaJuego extends Escenas {
                         }
                     }
                 }
-            break;
+                break;
         }
 
         if(!moviendo){
@@ -325,16 +336,16 @@ public class EscenaJuego extends Escenas {
 
             if(yFinal >= yInicial && yFinal <= yInicial + rangoY || yFinal <= yInicial && yFinal >= yInicial - rangoY){
                 if(xFinal > xInicial && xFinal >= xInicial+distanciaX){ //DERECHA
-                        md = true;
-                        mi = false;
-                        mar = false;
-                        mab = false;
+                    md = true;
+                    mi = false;
+                    mar = false;
+                    mab = false;
 
                 }else if(xFinal < xInicial && xFinal <= xInicial-distanciaX){ //IZQUIERDA
-                        md = false;
-                        mi = true;
-                        mar = false;
-                        mab = false;
+                    md = false;
+                    mi = true;
+                    mar = false;
+                    mab = false;
                 }
             }
 
@@ -358,7 +369,7 @@ public class EscenaJuego extends Escenas {
         for(Pared p:paredes){
             p.pulso(event);
         }
-        personaje.pulso(event);
+//        personaje.pulso(event);
 
         return numEscena;
     }
@@ -463,4 +474,3 @@ public class EscenaJuego extends Escenas {
         return 0;
     }
 }
-

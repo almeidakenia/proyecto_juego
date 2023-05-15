@@ -93,9 +93,9 @@ public class EscenaOpciones extends Escenas {
             c.drawColor(Color.MAGENTA);
         }
         c.drawRect(getMenu(), getPaintBlanco());
-        c.drawText("Volver", getAnchoPantalla()/8, getAltoPantalla()/40, getPaintNegro());
+        c.drawText(context.getText(R.string.button_volver).toString(), getAnchoPantalla()/8, getAltoPantalla()/40, getPaintNegro());
 
-        c.drawText("opciones "+numEscena,getAnchoPantalla()/2, getAltoPantalla()/64*7, getPaintBlanco());
+//        c.drawText(context.getText(R.string.boton_opciones).toString()+numEscena,getAnchoPantalla()/2, getAltoPantalla()/64*7, getPaintBlanco());
 
         int x_Texto = getAnchoPantalla()/32*22;
 
@@ -105,23 +105,18 @@ public class EscenaOpciones extends Escenas {
         c.drawBitmap(imagenenMusica, x_imagenes, y_musica, null);
         c.drawText(context.getText(R.string.activar_desactivar).toString(), x_Texto, y_musica+altoImagen/2, getPaintBlanco());
         c.drawText(context.getText(R.string.musica).toString(), x_Texto, y_musica+altoImagen/2+getAltoPantalla()/64*2, getPaintBlanco());
-//        c.drawText("música: "+sp.getBoolean("musica_on", true), x_Texto, y_musica+altoImagen+getAltoPantalla()/64*2, getPaintBlanco());
-
         c.drawBitmap(imagenSonido, x_imagenes, y_sonido, null);
         c.drawText(context.getText(R.string.activar_desactivar).toString(), x_Texto, y_sonido+altoImagen/2, getPaintBlanco());
         c.drawText(context.getText(R.string.sonido).toString(), x_Texto, y_sonido+altoImagen/2+getAltoPantalla()/64*2, getPaintBlanco());
-//        c.drawText("sonido: "+sp.getBoolean("sonido_on", true), x_Texto, y_sonido+altoImagen+getAltoPantalla()/64*2, getPaintBlanco());
-
         c.drawBitmap(imagenVibrador, x_imagenes, y_vibrador, null);
         c.drawText(context.getText(R.string.activar_desactivar).toString(), x_Texto, y_vibrador+altoImagen/2, getPaintBlanco());
         c.drawText(context.getText(R.string.vibracion).toString(), x_Texto, y_vibrador+altoImagen/2+getAltoPantalla()/64*2, getPaintBlanco());
-//        c.drawText("vibración: "+sp.getBoolean("vibracion_on", true), x_Texto, y_vibrador+altoImagen+getAltoPantalla()/64*2, getPaintBlanco());
 
         getPaintBlanco().setStyle(Paint.Style.STROKE);
-        c.drawRect(hitboxMusica, getPaintBlanco());
-        c.drawRect(hitboxIdioma, getPaintBlanco());
-        c.drawRect(hitboxSonido, getPaintBlanco());
-        c.drawRect(hitboxVibrador, getPaintBlanco());
+//        c.drawRect(hitboxMusica, getPaintBlanco());
+//        c.drawRect(hitboxIdioma, getPaintBlanco());
+//        c.drawRect(hitboxSonido, getPaintBlanco());
+//        c.drawRect(hitboxVibrador, getPaintBlanco());
         getPaintBlanco().setStyle(Paint.Style.FILL);
 
     }
@@ -173,13 +168,11 @@ public class EscenaOpciones extends Escenas {
                         editor.commit();
                     }
 
-
                     }else if(getMenu().contains(xInicial, yInicial)){ //esto tiene que ser si pulso sobre "volver"
                     return 1;
                 }
-
                 if(hitboxIdioma.contains(xInicial, yInicial)){
-                    return 6;
+                    return 3;
                 }
             break;
         }

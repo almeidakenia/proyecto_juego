@@ -107,14 +107,13 @@ public class JuegoSV extends SurfaceView implements SurfaceHolder.Callback {
         if (escenaActual.getNumEscena()!=nuevaEscena){
             switch (nuevaEscena){
                 case 1: escenaActual=new EscenaMenu(context, 1, anchoPantalla, altoPantalla); break;
-                case 2: escenaActual=new EscenaJuego(context, 2, anchoPantalla, altoPantalla); break;
-                //case 2: escenaActual=new EscenaJuego2(context, 2, anchoPantalla, altoPantalla); break;
-                case 3: escenaActual=new EscenaOpciones(context, 3, anchoPantalla, altoPantalla); break;
+                case 2: escenaActual=new EscenaOpciones(context, 2, anchoPantalla, altoPantalla); break;
+                case 3: escenaActual=new EscenaIdiomas(context, 3, anchoPantalla, altoPantalla); break;
                 case 4: escenaActual=new EscenaRecords(context, 4, anchoPantalla, altoPantalla); break;
                 case 5: escenaActual=new EscenaCreditos(context, 5, anchoPantalla, altoPantalla); break;
-                //case 6: escenaActual=new EscenaGameOver(context, 6, anchoPantalla,altoPantalla); break;
-                case 6: escenaActual=new EscenaIdiomas(context, 6, anchoPantalla, altoPantalla); break;
-                case 7: escenaActual=new EscenaJuego2(context, 7, anchoPantalla,altoPantalla); break;
+                case 6: escenaActual=new EscenaTutorial(context, 6, anchoPantalla, altoPantalla); break;
+                case 7: escenaActual=new EscenaJuego(context, 2, anchoPantalla, altoPantalla); break;
+                case 8: escenaActual=new EscenaJuego2(context, 7, anchoPantalla,altoPantalla); break;
             }
         }
     }

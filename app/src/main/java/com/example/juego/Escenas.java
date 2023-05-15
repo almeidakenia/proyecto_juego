@@ -15,6 +15,7 @@ public class Escenas {
     private Context context;
     private Paint paintBlanco;
     private Paint paintNegro;
+    private Paint paint_azul_claro;
     private Rect menu;
     private int duracionPartida;
 
@@ -38,6 +39,12 @@ public class Escenas {
         paintNegro.setTextSize(altoPantalla/40);
         paintNegro.setColor(Color.BLACK);
         paintNegro.setTextAlign(Paint.Align.CENTER);
+
+        int colorInt = Color.parseColor("#3D90FF");
+        paint_azul_claro = new Paint();
+        paint_azul_claro.setColor(colorInt);
+        paint_azul_claro.setTextSize(getPaintBlanco().getTextSize());
+        paint_azul_claro.setTextAlign(Paint.Align.CENTER);
     }
 
     int onTouchEvent(MotionEvent event){
@@ -101,6 +108,14 @@ public class Escenas {
 
     public void setDuracionPartida(int duracionPartida) {
         this.duracionPartida = duracionPartida;
+    }
+
+    public Paint getPaint_azul_claro() {
+        return paint_azul_claro;
+    }
+
+    public void setPaint_azul_claro(Paint paint_azul_claro) {
+        this.paint_azul_claro = paint_azul_claro;
     }
 }
 
