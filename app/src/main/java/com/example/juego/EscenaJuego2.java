@@ -26,31 +26,23 @@ import java.util.TimerTask;
 public class EscenaJuego2 extends Escenas {
     boolean pierde = false;
     boolean gana = false;
-
-    int record;
     private AudioManager audioManager;
     final private int maxSonidosSimultaneos = 1;
     private SoundPool efecto_sonido;
     private int sonidoWoosh;
-
     Vibrator vibrador;
-
     Paint paint_boton;
-
     Paint paintMagenta;
     SharedPreferences sp;
     SharedPreferences.Editor editor;
-
     private ArrayList<EnemigoMurcielago> murcielagos = new ArrayList<EnemigoMurcielago>();
-
     private EnemigoMurcielago murcielago, murcielago2;
     Bitmap imagenesMurcielago;
     private Rect menu2;
     private Rect botonPlayAgain;
     private Bitmap fondo;
     private int numEscena;
-    private Bitmap bitmapPersonaje;
-    private Bitmap bitmapColor;
+    private Bitmap bitmapColor, bitmapColorRojo;
     private Personaje personaje;
     private boolean md = false;
     private boolean mi = false;
@@ -58,11 +50,11 @@ public class EscenaJuego2 extends Escenas {
     private boolean mab = false;
     private boolean moviendo = false;
     private ArrayList<Pared> paredes;
+    private ArrayList<Pared> obstaculo_paredes;
     private int xInicial = 0;
     private int yInicial = 0;
     private int xFinal = 0;
     private int yFinal = 0;
-    int xFondo = 0;
     private Canvas c;
     int anchoFondo;
     int altoFondo;
@@ -70,9 +62,7 @@ public class EscenaJuego2 extends Escenas {
     private int miAncho = getAnchoPantalla()/32;
     private int miAlto =    getAltoPantalla()/64;
     private int tamMuro=getAltoPantalla()/64*50-getAltoPantalla()/64*49;
-
     private Puerta puerta;
-
     Timer timer = new Timer();
     TimerTask task;
     int count = 0;
@@ -123,19 +113,14 @@ public class EscenaJuego2 extends Escenas {
             this.efecto_sonido=new SoundPool(maxSonidosSimultaneos, AudioManager.STREAM_MUSIC, 0);
         }
         sonidoWoosh=efecto_sonido.load(context, R.raw.woosh,1);
-
-
         personaje = new Personaje(context, getAnchoPantalla(), getAltoPantalla(), miAncho*3, miAlto*59,40);
-
         puerta = new Puerta(context, getAnchoPantalla(), getAltoPantalla(), miAncho*27, miAlto*2, miAncho*29, miAlto*4);
         imagenesMurcielago = BitmapFactory.decodeResource(context.getResources(), R.drawable.enemigo_bat);
-
         murcielagos.clear();
         murcielago = new EnemigoMurcielago(context, imagenesMurcielago, getAnchoPantalla(), getAltoPantalla(), miAncho*5, miAlto*9, 9);
         murcielago2 = new EnemigoMurcielago(context, imagenesMurcielago, getAnchoPantalla(), getAltoPantalla(), miAncho*5, miAlto*19, 6);
         murcielagos.add(murcielago);
         murcielagos.add(murcielago2);
-
         this.menu2 =new Rect(miAncho*7, miAlto*40, miAncho*25, miAlto*45);
         this.botonPlayAgain = new Rect(miAncho*7, miAlto*28, miAncho*25, miAlto*33);
 
@@ -168,6 +153,7 @@ public class EscenaJuego2 extends Escenas {
         getPaintBlanco().setTextSize(getAnchoPantalla()/32);
 
         CreacionParedes();
+        CreacionObstaculos();
         vibrador = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
     }
 
@@ -179,8 +165,16 @@ public class EscenaJuego2 extends Escenas {
         }
     }
 
+    public void CreacionObstaculos(){
+        obstaculo_paredes.clear();
+        obstaculo_paredes.add( addParedV(bitmapColorRojo, miAncho*30,  miAlto*55, miAlto *6));
+        obstaculo_paredes.add( addParedH(bitmapColorRojo, miAncho*23,  miAlto*48, miAncho *7));
+        obstaculo_paredes.add( addParedV(bitmapColorRojo, miAncho*31,  miAlto*38, miAlto *5));
+        obstaculo_paredes.add( addParedH(bitmapColorRojo, miAncho*26,  miAlto*27, miAncho *5));
+        obstaculo_paredes.add( addParedH(bitmapColorRojo, miAncho*19,  miAlto*4, miAncho *4));
+    }
+
     public void CreacionParedes(){
-//        horizontal : RIGHT - LEFT         vertical: BUTTON - TOP
         paredes.clear();
         paredes.add( addParedH(bitmapColor, miAncho*1,  miAlto*52, miAncho *11));
         paredes.add( addParedV(bitmapColor, miAncho*1,  miAlto*52, miAlto *10));
@@ -241,7 +235,10 @@ public class EscenaJuego2 extends Escenas {
         altoFondo = fondo.getHeight();
         fondo = Bitmap.createScaledBitmap(fondo, getAnchoPantalla()*2, getAltoPantalla(), true);
         bitmapColor = BitmapFactory.decodeResource(context.getResources(), R.drawable.pared_amarilla);
+        bitmapColorRojo = BitmapFactory.decodeResource(context.getResources(), R.drawable.color_rojo);
+
         paredes = new ArrayList<>();
+        obstaculo_paredes = new ArrayList<>();
         inicializa();
     }
 
@@ -266,6 +263,9 @@ public class EscenaJuego2 extends Escenas {
             }else{
                 for(Pared pared : paredes){
                     pared.dibujar(c);
+                }
+                for(Pared obstaculo: obstaculo_paredes){
+                    obstaculo.dibujar(c);
                 }
                 for(EnemigoMurcielago murcielago : murcielagos){
                     murcielago.dibujar(c);
@@ -368,11 +368,6 @@ public class EscenaJuego2 extends Escenas {
             }
         }
 
-        for(Pared p:paredes){
-            p.pulso(event);
-        }
-        personaje.pulso(event);
-
         return numEscena;
     }
 
@@ -401,6 +396,30 @@ public class EscenaJuego2 extends Escenas {
                 pierde = true;
             }
         }
+
+        for(Pared obstaculo : obstaculo_paredes){
+            for(EnemigoMurcielago murcielago : murcielagos){
+                if (murcielago.colisiona(obstaculo.getHitbox())) {
+                    if (murcielago.derecha) {
+                        murcielago.EnemigoVolarIzquierda();
+                    } else {
+                        murcielago.EnemigoVolarDerecha();
+                    }
+                }
+            }
+            if (personaje.colisiona(obstaculo.getHitbox())) {
+                moviendo = false;
+                md = false;
+                mi = false;
+                mar = false;
+                mab = false;
+                if (!pierde) {
+                    onClickVibracion();
+                }
+                pierde = true;
+            }
+        }
+
         if(!pierde){
             for(EnemigoMurcielago murcielago : murcielagos){
                 murcielago.actualizaFisica();
@@ -410,6 +429,7 @@ public class EscenaJuego2 extends Escenas {
                     murcielago.EnemigoVolarIzquierda();
                 }
             }
+
             if (mi) {
                 moviendo = true;
                 personaje.mueveIzquierda();
@@ -466,6 +486,7 @@ public class EscenaJuego2 extends Escenas {
                 }
             }
         }
+
         return 0;
     }
 }

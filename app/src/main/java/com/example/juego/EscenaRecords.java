@@ -8,12 +8,27 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 
 public class EscenaRecords extends Escenas {
+    /**
+     * Número de la escena de la pantalla récords
+     */
     private int numEscena=4;
+    /**
+     * Imagen de fondo de la pantalla
+     */
     private Bitmap fondo;
+    /**
+     * Récord de tiempo de los distintos niveles del juego
+     */
     private int record1 = 0;
     private int record2 = 0;
+    /**
+     * Contexto de la aplicación
+     */
     private Context context;
 
+    /**
+     * Constructor de la clase que inicializa las variables
+     */
     public EscenaRecords(Context context, int numEscena, int anp, int alp) {
         super(context,  anp, alp, numEscena);
         this.numEscena=numEscena;
@@ -25,11 +40,9 @@ public class EscenaRecords extends Escenas {
         record2 = sp.getInt("r2", 0);
     }
 
-    @Override
-    public int actualizaFisica() {
-        return 0;
-    }
-
+    /**
+     * Método que dibuja todos los elementos visuales de la pantalla récords
+     */
     @Override
     public void dibuja(Canvas c) {
         try{

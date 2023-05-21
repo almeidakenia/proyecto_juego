@@ -28,6 +28,7 @@ public class JuegoSV extends SurfaceView implements SurfaceHolder.Callback {
     public AudioManager audioManager;
     SharedPreferences sp;
     SharedPreferences.Editor editor;
+    public static int numEscena;
 
     public JuegoSV(Context context) {
         super(context);
@@ -85,12 +86,6 @@ public class JuegoSV extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        int pointerIndex = event.getActionIndex();
-        int pointerID = event.getPointerId(pointerIndex);
-        int accion = event.getActionMasked();
-        int x=(int)event.getX();
-        int y=(int)event.getY();
-
         nuevaEscena=escenaActual.onTouchEvent(event);
         cambiaEscena();
 
@@ -105,6 +100,7 @@ public class JuegoSV extends SurfaceView implements SurfaceHolder.Callback {
 
     public void cambiaEscena(){
         if (escenaActual.getNumEscena()!=nuevaEscena){
+            numEscena = escenaActual.getNumEscena();
             switch (nuevaEscena){
                 case 1: escenaActual=new EscenaMenu(context, 1, anchoPantalla, altoPantalla); break;
                 case 2: escenaActual=new EscenaOpciones(context, 2, anchoPantalla, altoPantalla); break;
@@ -112,8 +108,8 @@ public class JuegoSV extends SurfaceView implements SurfaceHolder.Callback {
                 case 4: escenaActual=new EscenaRecords(context, 4, anchoPantalla, altoPantalla); break;
                 case 5: escenaActual=new EscenaCreditos(context, 5, anchoPantalla, altoPantalla); break;
                 case 6: escenaActual=new EscenaTutorial(context, 6, anchoPantalla, altoPantalla); break;
-                case 7: escenaActual=new EscenaJuego(context, 2, anchoPantalla, altoPantalla); break;
-                case 8: escenaActual=new EscenaJuego2(context, 7, anchoPantalla,altoPantalla); break;
+                case 7: escenaActual=new EscenaJuego(context, 7, anchoPantalla, altoPantalla); break;
+                case 8: escenaActual=new EscenaJuego2(context, 8, anchoPantalla,altoPantalla); break;
             }
         }
     }

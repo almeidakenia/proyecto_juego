@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
@@ -15,20 +14,48 @@ import java.util.Locale;
 
 
 public class EscenaIdiomas extends Escenas {
-    private int numEscena=6;
+    /**
+     * Número que representa la escena de idiomas
+     */
+    private int numEscena;
+    /**
+     * Imagen del fondo de la escena
+     */
     private Bitmap fondo;
+    /**
+     * Contexto de la aplicación
+     */
     Context context;
+    /**
+     * Imágenes que representan los idioma español e inglés
+     */
     private Bitmap imagen_ES, imagen_EN;
+    /**
+     * Rectángulos que permiten interactuar con las imágenes de los idiomas
+     */
     private Rect hitboxES, hitboxEN;
-    int anchoImagen, altoImagen, x_imagenes, y_imagenES, y_imagenEN;
+    /**
+     * Ancho y alto de las imágenes de idiomas
+     */
+    int anchoImagen, altoImagen;
+    /**
+     * Posición x, y de las imágenes
+     */
+    int x_imagenes, y_imagenES, y_imagenEN;
 
-    public Bitmap escalaAnchura(Context context, Bitmap bitmapAux, int nuevoAncho) {
+    /**
+     * Escala el bitmap que se recibe en función del nuevo ancho
+     */
+    public Bitmap escalaAnchura(Bitmap bitmapAux, int nuevoAncho) {
         if (nuevoAncho==bitmapAux.getWidth()){
             return bitmapAux;
         }
         return bitmapAux.createScaledBitmap(bitmapAux, nuevoAncho, (bitmapAux.getHeight() * nuevoAncho) / bitmapAux.getWidth(), true);
     }
 
+    /**
+     * Constructor de la clase que inicializa las variables
+     */
     public EscenaIdiomas(Context context, int numEscena, int anp, int alp) {
         super(context,  anp, alp, numEscena);
         this.context = context;
@@ -38,10 +65,10 @@ public class EscenaIdiomas extends Escenas {
 
         int anchoImagenes = getAnchoPantalla()/32*14;
         imagen_ES = BitmapFactory.decodeResource(context.getResources(), R.drawable.idioma_es);
-        imagen_ES = escalaAnchura(context, imagen_ES, anchoImagenes);
+        imagen_ES = escalaAnchura(imagen_ES, anchoImagenes);
 
         imagen_EN = BitmapFactory.decodeResource(context.getResources(), R.drawable.idioma_en);
-        imagen_EN = escalaAnchura(context, imagen_EN, anchoImagenes);
+        imagen_EN = escalaAnchura(imagen_EN, anchoImagenes);
 
         anchoImagen = imagen_ES.getWidth();
         altoImagen = imagen_ES.getHeight();
@@ -55,6 +82,9 @@ public class EscenaIdiomas extends Escenas {
         hitboxEN = new Rect(x_imagenes, y_imagenEN, x_imagenes+anchoImagenes, y_imagenEN+altoImagen);
     }
 
+    /**
+     * Dibuja los elementos necesarios en el lienzo del juego
+     */
     @Override
     public void dibuja(Canvas c) {
         try{
@@ -70,13 +100,11 @@ public class EscenaIdiomas extends Escenas {
 
         c.drawBitmap(imagen_EN, x_imagenes, y_imagenEN, null);
         c.drawText(context.getText(R.string.eng).toString(), x_imagenes+anchoImagen+getAnchoPantalla()/32*6, y_imagenEN+altoImagen/2, getPaintBlanco());
-
-//        getPaintBlanco().setStyle(Paint.Style.STROKE);
-//        c.drawRect(hitboxES, getPaintBlanco());
-//        c.drawRect(hitboxEN, getPaintBlanco());
-//        getPaintBlanco().setStyle(Paint.Style.FILL);
     }
 
+    /**
+     * Cambia el idioma de la aplicación, utilizando fichero de strings.xml correspondiente
+     */
     public void cambiaIdioma(String cod){
         Resources res = context.getResources();
         DisplayMetrics dm = res.getDisplayMetrics();
@@ -85,6 +113,9 @@ public class EscenaIdiomas extends Escenas {
         res.updateConfiguration(conf, dm);
     }
 
+    /**
+     * Detecta las pulsaciones del usuario para mostrar el contenido en el idioma correspondiente a la opción pulsada
+     */
     @Override
     int onTouchEvent(MotionEvent event) {
         int x = (int) event.getX();
@@ -99,9 +130,8 @@ public class EscenaIdiomas extends Escenas {
                     cambiaIdioma("ES");
                     return 1;
                 }
-            break;
+                break;
         }
         return super.onTouchEvent(event);
     }
 }
-

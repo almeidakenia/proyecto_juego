@@ -10,18 +10,50 @@ import android.graphics.Rect;
 import android.view.MotionEvent;
 
 public class EscenaTutorial extends Escenas{
+    /**
+     * Número de la escena de la pantalla tutorial
+     */
     private int numEscena;
+    /**
+     * Imagen de fondo de la pantalla
+     */
     private Bitmap fondo;
+    /**
+     * Contexto de la aplicación
+     */
     private Context context;
+    /**
+     * Imagen de flecha para avanzar
+     */
     Bitmap boton_siguiente;
+    /**
+     * Bitmap auxiliar para las imágenes del tutorial
+     */
     Bitmap aux;
+    /**
+     * Rectángulo que representa botón para avanzar a la siguiente imagen o escena
+     */
     Rect siguiente_pagina;
+    /**
+     * Imágenes de explicación del juego
+     */
     Bitmap fondo1, fondo2, fondo3, fondo4, fondo5;
+    /**
+     * Ancho y alto de la pantalla
+     */
     int anchoPantalla, altoPantalla;
+    /**
+     * Número de la imagen que se muestra
+     */
     int numpag = 1;
+    /**
+     * Ancho del botón avanzar
+     */
     int ancho_boton_siguiente;
-    Paint paint = new Paint();
 
+    /**
+     * Escala el bitmap que se recibe en función del nuevo ancho
+     */
     public Bitmap escalaAnchura(Bitmap bitmap, int nuevoAncho) {
         Bitmap bitmapAux= bitmap;
         if (nuevoAncho==bitmapAux.getWidth()) return bitmapAux;
@@ -29,6 +61,9 @@ public class EscenaTutorial extends Escenas{
                 bitmapAux.getWidth(), true);
     }
 
+    /**
+     * Escala el bitmap que se recibe en función del la nueva altura
+     */
     public Bitmap escalaAltura(Bitmap bitmap, int nuevoAlto ) {
         Bitmap bitmapAux= bitmap;
         if (nuevoAlto==bitmapAux.getHeight()) return bitmapAux;
@@ -36,16 +71,15 @@ public class EscenaTutorial extends Escenas{
                 bitmapAux.getHeight(),  nuevoAlto, true);
     }
 
+    /**
+     * Constructor de la clase que inicializa las variables
+     */
     public EscenaTutorial(Context context, int numEscena, int anp, int alp) {
         super(context,  anp, alp, numEscena);
         this.numEscena=numEscena;
         this.context=context;
         this.anchoPantalla = anp;
         this.altoPantalla = alp;
-//        fondo = BitmapFactory.decodeResource(context.getResources(), R.drawable.fondo_movil);
-//        fondo = Bitmap.createScaledBitmap(fondo, getAnchoPantalla(), getAltoPantalla(), true);
-
-
 
         aux = BitmapFactory.decodeResource(context.getResources(), R.drawable.tut_derecha_es);
         fondo1 = escalaAltura(aux,altoPantalla);
@@ -83,9 +117,11 @@ public class EscenaTutorial extends Escenas{
 
         fondo = fondo1;
 
-        paint.setColor(Color.BLACK);
     }
 
+    /**
+     * Función que dibuja los botones y las imágenes correspondientes sobre el lienzo de la aplicación
+     */
     @Override
     public void dibuja(Canvas c) {
         try{
@@ -93,13 +129,16 @@ public class EscenaTutorial extends Escenas{
         }catch (Exception e){
             c.drawColor(Color.MAGENTA);
         }
-        c.drawRect(siguiente_pagina,paint);
+        c.drawRect(siguiente_pagina,getPaintNegro());
         c.drawBitmap(boton_siguiente, anchoPantalla-ancho_boton_siguiente,altoPantalla/10*4,null);
 
         c.drawRect(getMenu(), getPaintBlanco());
         c.drawText(context.getText(R.string.button_volver).toString(), getAnchoPantalla()/8, getAltoPantalla()/40, getPaintNegro());
     }
 
+    /**
+     * Detecta las pulsaciones del usuario para cambiar la imagen mostrada.
+     */
     @Override
     int onTouchEvent(MotionEvent event) {
         int accion = event.getActionMasked();
