@@ -2,38 +2,77 @@ package com.example.juego;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Matrix;
-import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.Rect;
 
 public class EnemigoMurcielago {
+    /**
+     * Contexto de la aplicación
+     */
     Context context;
+    /**
+     * Posición
+     * Posición x, y inicial del murciélago
+     */
     public PointF posicion;
-    Bitmap imagenes; // Bitmap con todas las imágenes
+    /**
+     * Imagen completa
+     * Bitmap con todas las imágenes del murciélago
+     */
+    Bitmap imagenes;
+    /**
+     * Bitmaps de murciélagos
+     * imagenesVolar : Array de bitmaps que contiene las imágenes del murciélago en vuelo.
+     * imagenesVolarDerecha : Array de bitmaps con las imágenes del murciélago volando a la derecha
+     * imagenesVolarIzquierda : Array de bitmaps con las imágenes del murciélago volando a la izquierda
+     */
     Bitmap[] imagenesVolar;
     Bitmap[] imagenesVolarDerecha;
     Bitmap[] imagenesVolarIzquierda;
+    /**
+     * Imagen actual
+     * Bitmap que representa la imagen actual del murciélago.
+     */
     Bitmap imagen;
-    int anchoImagenes; //Ancho del bitmap
-    int altoImagenes;
-    Rect rectangulo; //cuadradito que representa cada imagen
-    Paint p;
-    int x;
-    int y;
+    /**
+     * Rectángulo que delimita la imagen del murciélago en el juego.
+     */
+    Rect rectangulo;
+    /**
+     * Ancho y alto de la pantalla de las imágenes del murciélago
+     */
+    int anchoImagenes, altoImagenes;
+    /**
+     * Ancho y alto de la pantalla del dispositivo
+     */
     int anchoPantalla;
     int altoPantalla;
+    /**
+     * Velocidad de movimiento del murciélago
+     */
     int velocidad;
+    /**
+     * Índice de la imagen actual del murciélago
+     */
     int frame = 0;
+    /**
+     * Dirección de movimiento del murciélago
+     */
     boolean derecha = true;
-    boolean izquierda = false;
-
+    /**
+     * Tiempo transcurrido desde la última actualización del estado del murciélago
+     */
     long tiempoFrame = 0;
+    /**
+     *  Tiempo mínimo en milisegundos entre actualizaciones de animación del murciélago.
+     */
     int tickFrame = 50;
 
+    /**
+     * Escala el bitmap que se recibe en función del nuevo ancho
+     */
     public Bitmap escalaAnchura(Context context, Bitmap bitmapAux, int nuevoAncho) {
         if (nuevoAncho==bitmapAux.getWidth()){
             return bitmapAux;
@@ -41,6 +80,9 @@ public class EnemigoMurcielago {
         return bitmapAux.createScaledBitmap(bitmapAux, nuevoAncho, (bitmapAux.getHeight() * nuevoAncho) / bitmapAux.getWidth(), true);
     }
 
+    /**
+     * Método para reflejar una imagen horizontal o verticalmente.
+     */
     public Bitmap espejo(Bitmap imagen, Boolean horizontal){
         Matrix matrix = new Matrix();
         if (horizontal){
@@ -52,6 +94,9 @@ public class EnemigoMurcielago {
         return Bitmap.createBitmap(imagen, 0, 0, imagen.getWidth(), imagen.getHeight(), matrix, false);
     }
 
+    /**
+     * Constructor de la clase que inicializa las variables
+     */
     public EnemigoMurcielago(Context context, Bitmap imagenes,int anchoPantalla, int altoPantalla, float x, float y, int velocidad) {
         this.context = context;
         this.velocidad = velocidad;
@@ -61,7 +106,6 @@ public class EnemigoMurcielago {
         this.altoPantalla = altoPantalla;
         anchoImagenes = imagenes.getWidth();
         altoImagenes = imagenes.getHeight();
-//        this.imagen = Bitmap.createBitmap(imagenes, anchoPantalla/32*16, altoPantalla/64*48, anchoImagenes/8, 0);
         imagenesVolarDerecha = new Bitmap[8];
         imagenesVolarIzquierda = new Bitmap[8];
         for(int i = 0; i < imagenesVolarDerecha.length; i++){
@@ -74,18 +118,19 @@ public class EnemigoMurcielago {
         this.imagenesVolar = imagenesVolarDerecha;
         this.imagen = imagenesVolar[0];
         this.setRectangulo();
-        p =new Paint();
-        p.setColor(Color.WHITE);
-        p.setStyle(Paint.Style.STROKE);
-        p.setStrokeWidth(5);
     }
 
+    /**
+     * Dibuja el murciélago en el lienzo del juego
+     */
     public void dibujar(Canvas c){
         c.drawBitmap(imagenesVolar[frame],posicion.x,posicion.y, null);
-
-//        c.drawRect(rectangulo, p); //esto hay que comentarlo
+//        c.drawRect(rectangulo, p);
     }
 
+    /**
+     * Actualiza la animación del murciélago
+     */
     public void actualizaFisica(){
         if(System.currentTimeMillis() - tiempoFrame > tickFrame){
             frame++;
@@ -95,9 +140,11 @@ public class EnemigoMurcielago {
             tiempoFrame = System.currentTimeMillis();
         }
         this.imagen = imagenesVolar[frame];
-
     }
 
+    /**
+     * Mover murciélago hacia la derecha
+     */
     public void EnemigoVolarDerecha(){
         derecha = true;
         posicion.x+=velocidad;
@@ -106,6 +153,9 @@ public class EnemigoMurcielago {
         actualizaFisica();
     }
 
+    /**
+     * Mover murciélago hacia la izquierda
+     */
     public void EnemigoVolarIzquierda(){
         derecha = false;
         posicion.x -= velocidad;
@@ -113,14 +163,20 @@ public class EnemigoMurcielago {
         setRectangulo();
         actualizaFisica();
     }
+
+    /**
+     * Método que establece el rectángulo que representa al murciélago.
+     */
     public void setRectangulo(){
         float x=posicion.x;
         float y=posicion.y;
         rectangulo=new Rect( (int)(x+0.2*imagen.getWidth()), (int)(y+0.2*imagen.getHeight()),
                 (int)(x+0.8*imagen.getWidth()), (int)(y+0.8*imagen.getHeight()));
-
     }
 
+    /**
+     * Verifica si el murciélago ha colisionado
+     */
     public boolean colisiona(Rect r){
         return rectangulo.intersect(r);
     }

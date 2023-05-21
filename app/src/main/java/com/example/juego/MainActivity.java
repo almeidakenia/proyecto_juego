@@ -9,16 +9,27 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
+    /**
+     * SensorManager
+     * Sensor que obtiene los datos del hardware del móvil
+     */
     private SensorManager sensorManager;
+    /**
+     * Acelerómetro
+     * Variables que contienen información sobre el acelerómetro
+     */
     private float acelerometro, current_acelerometro, last_acelerometro;
 
+    /**
+     * Detección de eventos del sensor.
+     * Implementa el método onSensorChanged para detectar cambios en el valor del acelerómetro.
+     */
     private final SensorEventListener sensorListener = new SensorEventListener() {
         @Override
         public void onSensorChanged(SensorEvent event) {
@@ -30,9 +41,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             current_acelerometro = (float) Math.sqrt((double) (x * x + y * y + z * z));
             float delta = current_acelerometro - acelerometro;
             acelerometro = acelerometro * 0.9f + delta;
-            if(acelerometro > 12){
-                Log.i("sensor", "onSensorChanged: funcionó");
-                JuegoSV.escenaActual = new EscenaJuego(getApplicationContext(), 2, JuegoSV.anchoPantalla, JuegoSV.altoPantalla);
+            if(acelerometro > 12){  //AQUÍ ES DONDE CONTROLO QUÉ VA OCURRIR AL AGITAR EL MÓVIL
+                JuegoSV.escenaActual = new EscenaJuego2(getApplicationContext(), 8, JuegoSV.anchoPantalla, JuegoSV.altoPantalla);
             }
         }
 

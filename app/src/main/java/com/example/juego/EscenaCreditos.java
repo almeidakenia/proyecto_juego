@@ -5,13 +5,24 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
 
 public class EscenaCreditos extends Escenas {
+    /**
+     *  Número de la escena de créditos.
+     */
     private int numEscena;
+    /**
+     * Imagen de fondo de la escena
+     */
     private Bitmap fondo;
+    /**
+     * Contexto de la aplicación
+     */
     private Context context;
 
+    /**
+     * Constructor de la clase que inicializa las variables
+     */
     public EscenaCreditos(Context context, int numEscena, int anp, int alp) {
         super(context,  anp, alp, numEscena);
         this.numEscena=numEscena;
@@ -20,6 +31,9 @@ public class EscenaCreditos extends Escenas {
         fondo = Bitmap.createScaledBitmap(fondo, getAnchoPantalla(), getAltoPantalla(), true);
     }
 
+    /**
+     * Método que dibuja el todos los elementos visuales de la pantalla créditos. Estos son: fondo, botón y textos.
+     */
     @Override
     public void dibuja(Canvas c) {
         try{

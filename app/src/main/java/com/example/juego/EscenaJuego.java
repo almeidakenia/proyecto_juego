@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Rect;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
@@ -14,22 +13,17 @@ import android.media.SoundPool;
 import android.os.Build;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
-import android.util.Log;
 import android.view.MotionEvent;
-import android.view.View;
-
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class EscenaJuego extends Escenas {
-    Paint paint_boton;
-    boolean pierde = false;
-    boolean gana = false;
     SharedPreferences sp;
     SharedPreferences.Editor editor;
     Vibrator vibrador;
-    Paint paintMagenta;
+    boolean pierde;
+    boolean gana;
     private ArrayList<EnemigoMurcielago> murcielagos = new ArrayList<EnemigoMurcielago>();
     private EnemigoMurcielago murcielago, murcielago2;
     Bitmap imagenesMurcielago;
@@ -63,7 +57,7 @@ public class EscenaJuego extends Escenas {
     private int miAlto =    getAltoPantalla()/64;
     private int tamMuro=getAltoPantalla()/64*50-getAltoPantalla()/64*49;
     private Puerta puerta;
-    Timer timer = new Timer();
+    Timer timer;
     TimerTask task;
     int count = 0;
     int minutos = 0;
@@ -112,7 +106,7 @@ public class EscenaJuego extends Escenas {
             this.efecto_sonido=new SoundPool(maxSonidosSimultaneos, AudioManager.STREAM_MUSIC, 0);
         }
         sonidoWoosh=efecto_sonido.load(context, R.raw.woosh,1);
-        personaje = new Personaje(context,getAnchoPantalla(), getAltoPantalla(), miAncho*20, miAlto*58,40);
+        personaje = new Personaje(context,getAnchoPantalla(), getAltoPantalla(), miAncho*21, miAlto*60,40);
         puerta = new Puerta(context, getAnchoPantalla(), getAltoPantalla(), miAncho*20, miAlto, miAncho*22, miAlto*3);
         imagenesMurcielago = BitmapFactory.decodeResource(context.getResources(), R.drawable.enemigo_bat);
         murcielagos.clear();
@@ -140,17 +134,6 @@ public class EscenaJuego extends Escenas {
             }
         };
         timer.schedule(task, 0, 1000);
-
-        paintMagenta = new Paint();
-        paintMagenta.setColor(Color.MAGENTA);
-        paintMagenta.setAlpha(200);
-
-        int colorInt = Color.parseColor("#763B6E");
-        this.paint_boton = new Paint();
-        paint_boton.setColor(colorInt);
-        paint_boton.setAlpha(150);
-        getPaintBlanco().setTextSize(getAnchoPantalla()/32);
-
         CreacionParedes();
         vibrador = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
 
@@ -165,7 +148,6 @@ public class EscenaJuego extends Escenas {
     }
 
     public void CreacionParedes(){
-        //horizontal : RIGHT - LEFT         vertical: BUTTON - TOP
         paredes.clear();
         paredes.add( addParedH(bitmapColor, miAncho*1,  miAlto*49, miAncho *6));
         paredes.add( addParedV(bitmapColor, miAncho*1,  miAlto*49, miAlto *12));
@@ -238,7 +220,7 @@ public class EscenaJuego extends Escenas {
         }
         if(!pierde){
             if(gana){
-                c.drawRect(new Rect(miAncho*3, miAlto*9, miAncho*29, miAlto*53),paintMagenta);
+                c.drawRect(new Rect(miAncho*3, miAlto*9, miAncho*29, miAlto*53),getPaintMagenta());
                 c.drawRect(new Rect(miAncho*5, miAlto*13, miAncho*27, miAlto*21),getPaintBlanco());
                 c.drawText(context.getText(R.string.gana).toString(), miAncho*16, miAlto*17, getPaintNegro());
                 c.drawRect(boton_volver_jugar, getPaintBlanco());
@@ -257,22 +239,21 @@ public class EscenaJuego extends Escenas {
                 }
                 puerta.dibujar(c);
                 personaje.dibujar(c);
-                c.drawRect(getMenu(), paint_boton);
+                c.drawRect(getMenu(), getPaint_lila());
+                getPaintBlanco().setTextSize(getAnchoPantalla()/32);
                 c.drawText(context.getText(R.string.button_volver).toString(), getAnchoPantalla()/8, getAltoPantalla()/40, getPaintBlanco());
                 String formattedString = String.format("%02d:%02d", minutos, segundos);
                 c.drawText(formattedString, miAncho*2, miAlto*6, getPaintBlanco());
+                getPaintBlanco().setTextSize(getAnchoPantalla()/16);
             }
         }
         else{
-            c.drawRect(new Rect(miAncho*3, miAlto*11, miAncho*29, miAlto*49),paintMagenta);
+            c.drawRect(new Rect(miAncho*3, miAlto*11, miAncho*29, miAlto*49),getPaintMagenta());
             c.drawRect(new Rect(miAncho*5, miAlto*15, miAncho*27, miAlto*23),getPaintBlanco());
-//            c.drawText("¡Has perdido!", miAncho*16, miAlto*19, getPaintNegro());
             c.drawText(context.getText(R.string.pierde).toString(), miAncho*16, miAlto*19, getPaintNegro());
             c.drawRect(boton_volver_jugar, getPaintBlanco());
-//            c.drawText("Volver a jugar", miAncho*16, miAlto*31, getPaintNegro());
             c.drawText(context.getText(R.string.boton_jugarOtraVez).toString(), miAncho*16, miAlto*31, getPaintNegro());
             c.drawRect(boton_volver_menu, getPaintBlanco());
-//            c.drawText("Volver al menú", miAncho*16, miAlto*41, getPaintNegro());
             c.drawText(context.getText(R.string.button_volver_2).toString(), miAncho*16, miAlto*41, getPaintNegro());
         }
     }
@@ -327,12 +308,8 @@ public class EscenaJuego extends Escenas {
             int rangoX = getAnchoPantalla()/16*2;
             int rangoY = getAltoPantalla()/32*2;
 
-//            int distanciaX = getAnchoPantalla()/16*6;
             int distanciaX = getAnchoPantalla()/16*3;
-//            int distanciaY = getAltoPantalla()/32*6;
             int distanciaY = getAltoPantalla()/32*3;
-
-            Log.i("JUEGO", "INICIAL: "+xInicial+","+yInicial+" FINAL: "+xFinal+", "+yFinal);
 
             if(yFinal >= yInicial && yFinal <= yInicial + rangoY || yFinal <= yInicial && yFinal >= yInicial - rangoY){
                 if(xFinal > xInicial && xFinal >= xInicial+distanciaX){ //DERECHA
@@ -365,11 +342,6 @@ public class EscenaJuego extends Escenas {
                 }
             }
         }
-
-        for(Pared p:paredes){
-            p.pulso(event);
-        }
-//        personaje.pulso(event);
 
         return numEscena;
     }

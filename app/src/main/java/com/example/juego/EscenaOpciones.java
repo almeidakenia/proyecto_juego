@@ -11,28 +11,65 @@ import android.graphics.Rect;
 import android.view.MotionEvent;
 
 public class EscenaOpciones extends Escenas {
+    /**
+     * Número de la escena de opciones
+     */
     private int numEscena;
+    /**
+     * Contexto de la aplicación
+     */
     Context context;
+    /**
+     * Imagen de fondo de la pantalla
+     */
     private Bitmap fondo;
+    /**
+     * Imágenes para los iconos con las distintas opciones
+     */
     Bitmap imagenenMusica, imagenSonido, imagenVibrador, imagenIdioma;
-    int anchoImagen; //Ancho del bitmap
-    int altoImagen;
-    Rect hitboxMusica, hitboxSonido, hitboxVibrador, hitboxIdioma; //cuadradito que representa cada imagen
+    /**
+     * Ancho y alto de las imágenes
+     */
+    int anchoImagen, altoImagen;
+    /**
+     * Hitbox de los distintos botones
+     */
+    Rect hitboxMusica, hitboxSonido, hitboxVibrador, hitboxIdioma;
+    /**
+     * Posición x, y de donde pulsa el usuario sobre la pantalla
+     */
     int xInicial;
     int yInicial;
+    /**
+     * Posición x, y de las imágenes
+     */
     int x_imagenes, y_musica, y_idioma, y_sonido, y_vibrador;
+    /**
+     * Ancho de las imágenes
+     */
     int anchoImagenes;
-
+    /**
+     * Variable que permite acceder a valores almacenados de forma persistente
+     */
     SharedPreferences sp;
+    /**
+     * Permite realizar modificaciones en el archivo XML de SharedPreferences
+     */
     SharedPreferences.Editor editor;
 
-    public Bitmap escalaAnchura(Context context, Bitmap bitmapAux, int nuevoAncho) {
+    /**
+     * Escala el bitmap que se recibe en función del nuevo ancho
+     */
+    public Bitmap escalaAnchura(Bitmap bitmapAux, int nuevoAncho) {
         if (nuevoAncho==bitmapAux.getWidth()){
             return bitmapAux;
         }
         return bitmapAux.createScaledBitmap(bitmapAux, nuevoAncho, (bitmapAux.getHeight() * nuevoAncho) / bitmapAux.getWidth(), true);
     }
 
+    /**
+     * Constructor de la clase que inicializa las variables
+     */
     public EscenaOpciones(Context context, int numEscena, int anp, int alp) {
         super(context, anp, alp, numEscena);
         this.context = context;
@@ -46,28 +83,28 @@ public class EscenaOpciones extends Escenas {
         anchoImagenes = getAnchoPantalla()/32*7;
 
         imagenIdioma = BitmapFactory.decodeResource(context.getResources(), R.drawable.language);
-        imagenIdioma = escalaAnchura(context, imagenIdioma, anchoImagenes);
+        imagenIdioma = escalaAnchura(imagenIdioma, anchoImagenes);
 
         if(sp.getBoolean("musica_on", true) == true){
             imagenenMusica = BitmapFactory.decodeResource(context.getResources(), R.drawable.music_on);
         }else{
             imagenenMusica = BitmapFactory.decodeResource(context.getResources(), R.drawable.music_off);
         }
-        imagenenMusica = escalaAnchura(context, imagenenMusica, anchoImagenes);
+        imagenenMusica = escalaAnchura(imagenenMusica, anchoImagenes);
 
         if(sp.getBoolean("sonido_on", true) == true){
             imagenSonido = BitmapFactory.decodeResource(context.getResources(), R.drawable.sonido_on);
         }else{
             imagenSonido = BitmapFactory.decodeResource(context.getResources(), R.drawable.sonido_off);
         }
-        imagenSonido = escalaAnchura(context, imagenSonido, anchoImagenes);
+        imagenSonido = escalaAnchura(imagenSonido, anchoImagenes);
 
         if(sp.getBoolean("vibracion_on", true) == true){
             imagenVibrador = BitmapFactory.decodeResource(context.getResources(), R.drawable.vibration_on);
         }else{
             imagenVibrador = BitmapFactory.decodeResource(context.getResources(), R.drawable.vibration_off);
         }
-        imagenVibrador = escalaAnchura(context, imagenVibrador, anchoImagenes);
+        imagenVibrador = escalaAnchura(imagenVibrador, anchoImagenes);
 
         anchoImagen = imagenenMusica.getWidth();
         altoImagen = imagenenMusica.getHeight();
@@ -85,6 +122,9 @@ public class EscenaOpciones extends Escenas {
         hitboxVibrador=new Rect(x_imagenes, y_vibrador, x_imagenes+anchoImagen, y_vibrador+altoImagen);
     }
 
+    /**
+     * Método que dibuja todos los elementos visuales de la pantalla opciones
+     */
     @Override
     public void dibuja(Canvas c) {
         try{
@@ -121,6 +161,9 @@ public class EscenaOpciones extends Escenas {
 
     }
 
+    /**
+     * Detecta las pulsaciones del usuario sobre la pantalla y realiza la acción correspondiente al botón pulsado.
+     */
     @Override
     int onTouchEvent(MotionEvent event) {
 
@@ -132,25 +175,25 @@ public class EscenaOpciones extends Escenas {
                 if (hitboxMusica.contains(xInicial, yInicial)) {
                     if (sp.getBoolean("musica_on", true) == true) {
                         imagenenMusica = BitmapFactory.decodeResource(context.getResources(), R.drawable.music_off);
-                        imagenenMusica = escalaAnchura(context, imagenenMusica, anchoImagenes);
+                        imagenenMusica = escalaAnchura(imagenenMusica, anchoImagenes);
                         editor.putBoolean("musica_on", false);
                         editor.commit();
 
                     } else {
                         imagenenMusica = BitmapFactory.decodeResource(context.getResources(), R.drawable.music_on);
-                        imagenenMusica = escalaAnchura(context, imagenenMusica, anchoImagenes);
+                        imagenenMusica = escalaAnchura(imagenenMusica, anchoImagenes);
                         editor.putBoolean("musica_on", true);
                         editor.commit();
                     }
                 }else if(hitboxSonido.contains(xInicial, yInicial)) {
                     if(sp.getBoolean("sonido_on", true) == true){
                         imagenSonido = BitmapFactory.decodeResource(context.getResources(), R.drawable.sonido_off);
-                        imagenSonido = escalaAnchura(context, imagenSonido, anchoImagenes);
+                        imagenSonido = escalaAnchura(imagenSonido, anchoImagenes);
                         editor.putBoolean("sonido_on", false);
                         editor.commit();
                     }else{
                         imagenSonido = BitmapFactory.decodeResource(context.getResources(), R.drawable.sonido_on);
-                        imagenSonido = escalaAnchura(context, imagenSonido, anchoImagenes);
+                        imagenSonido = escalaAnchura(imagenSonido, anchoImagenes);
                         editor.putBoolean("sonido_on", true);
                         editor.commit();
                     }
@@ -158,23 +201,23 @@ public class EscenaOpciones extends Escenas {
                 }else if(hitboxVibrador.contains(xInicial, yInicial)){
                     if(sp.getBoolean("vibracion_on", true) == true){
                         imagenVibrador = BitmapFactory.decodeResource(context.getResources(), R.drawable.vibration_off);
-                        imagenVibrador = escalaAnchura(context, imagenVibrador, anchoImagenes);
+                        imagenVibrador = escalaAnchura(imagenVibrador, anchoImagenes);
                         editor.putBoolean("vibracion_on", false);
                         editor.commit();
                     }else{
                         imagenVibrador = BitmapFactory.decodeResource(context.getResources(), R.drawable.vibration_on);
-                        imagenVibrador = escalaAnchura(context, imagenVibrador, anchoImagenes);
+                        imagenVibrador = escalaAnchura(imagenVibrador, anchoImagenes);
                         editor.putBoolean("vibracion_on", true);
                         editor.commit();
                     }
 
-                    }else if(getMenu().contains(xInicial, yInicial)){ //esto tiene que ser si pulso sobre "volver"
+                }else if(getMenu().contains(xInicial, yInicial)){
                     return 1;
                 }
                 if(hitboxIdioma.contains(xInicial, yInicial)){
                     return 3;
                 }
-            break;
+                break;
         }
         return numEscena;
     }
