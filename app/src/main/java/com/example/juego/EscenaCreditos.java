@@ -41,8 +41,10 @@ public class EscenaCreditos extends Escenas {
         }catch (Exception e){
             c.drawColor(Color.MAGENTA);
         }
-        c.drawRect(getMenu(), getPaintBlanco());
-        c.drawText(context.getText(R.string.button_volver).toString(), getAnchoPantalla()/8, getAltoPantalla()/40, getPaintNegro());
+        c.drawRect(getMenu(), getPaint_lila());
+        getPaintBlanco().setTextSize(getAnchoPantalla()/32);
+        c.drawText(context.getText(R.string.button_volver).toString(), getAnchoPantalla()/8, getAltoPantalla()/40, getPaintBlanco());
+        getPaintBlanco().setTextSize(getAnchoPantalla()/16);
         c.drawText(context.getText(R.string.recursos).toString(), getAnchoPantalla()/2, getAltoPantalla()/20*3, getPaint_azul_claro());
         c.drawText("Itch.io", getAnchoPantalla()/2, getAltoPantalla()/20*5, getPaintBlanco());
         c.drawText("Canva", getAnchoPantalla()/2, getAltoPantalla()/20*7, getPaintBlanco());

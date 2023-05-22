@@ -68,7 +68,7 @@ public class EscenaOpciones extends Escenas {
     }
 
     /**
-     * Constructor de la clase que inicializa las variables
+     * Constructor que instancia la clase
      */
     public EscenaOpciones(Context context, int numEscena, int anp, int alp) {
         super(context, anp, alp, numEscena);
@@ -132,37 +132,30 @@ public class EscenaOpciones extends Escenas {
         }catch (Exception e){
             c.drawColor(Color.MAGENTA);
         }
-        c.drawRect(getMenu(), getPaintBlanco());
-        c.drawText(context.getText(R.string.button_volver).toString(), getAnchoPantalla()/8, getAltoPantalla()/40, getPaintNegro());
-
-//        c.drawText(context.getText(R.string.boton_opciones).toString()+numEscena,getAnchoPantalla()/2, getAltoPantalla()/64*7, getPaintBlanco());
+        c.drawRect(getMenu(), getPaint_lila());
+        getPaintBlanco().setTextSize(getAnchoPantalla()/32);
+        c.drawText(context.getText(R.string.button_volver).toString(), getAnchoPantalla()/8, getAltoPantalla()/40, getPaintBlanco());
+        getPaintBlanco().setTextSize(getAnchoPantalla()/16);
 
         int x_Texto = getAnchoPantalla()/32*22;
 
         c.drawBitmap(imagenIdioma, x_imagenes, y_idioma, null);
-        c.drawText(context.getText(R.string.boton_cambiarIdioma).toString(), x_Texto, y_idioma+altoImagen/2, getPaintBlanco());
-
+        getPaint_rosa_claro().setTextSize(getPaintBlanco().getTextSize());
+        c.drawText(context.getText(R.string.boton_cambiarIdioma).toString(), x_Texto, y_idioma+altoImagen/2, getPaint_rosa_claro());
         c.drawBitmap(imagenenMusica, x_imagenes, y_musica, null);
-        c.drawText(context.getText(R.string.activar_desactivar).toString(), x_Texto, y_musica+altoImagen/2, getPaintBlanco());
-        c.drawText(context.getText(R.string.musica).toString(), x_Texto, y_musica+altoImagen/2+getAltoPantalla()/64*2, getPaintBlanco());
+        c.drawText(context.getText(R.string.activar_desactivar).toString(), x_Texto, y_musica+altoImagen/2, getPaint_rosa_claro());
+        c.drawText(context.getText(R.string.musica).toString(), x_Texto, y_musica+altoImagen/2+getAltoPantalla()/64*2, getPaint_rosa_claro());
         c.drawBitmap(imagenSonido, x_imagenes, y_sonido, null);
-        c.drawText(context.getText(R.string.activar_desactivar).toString(), x_Texto, y_sonido+altoImagen/2, getPaintBlanco());
-        c.drawText(context.getText(R.string.sonido).toString(), x_Texto, y_sonido+altoImagen/2+getAltoPantalla()/64*2, getPaintBlanco());
+        c.drawText(context.getText(R.string.activar_desactivar).toString(), x_Texto, y_sonido+altoImagen/2, getPaint_rosa_claro());
+        c.drawText(context.getText(R.string.sonido).toString(), x_Texto, y_sonido+altoImagen/2+getAltoPantalla()/64*2, getPaint_rosa_claro());
         c.drawBitmap(imagenVibrador, x_imagenes, y_vibrador, null);
-        c.drawText(context.getText(R.string.activar_desactivar).toString(), x_Texto, y_vibrador+altoImagen/2, getPaintBlanco());
-        c.drawText(context.getText(R.string.vibracion).toString(), x_Texto, y_vibrador+altoImagen/2+getAltoPantalla()/64*2, getPaintBlanco());
-
-        getPaintBlanco().setStyle(Paint.Style.STROKE);
-//        c.drawRect(hitboxMusica, getPaintBlanco());
-//        c.drawRect(hitboxIdioma, getPaintBlanco());
-//        c.drawRect(hitboxSonido, getPaintBlanco());
-//        c.drawRect(hitboxVibrador, getPaintBlanco());
-        getPaintBlanco().setStyle(Paint.Style.FILL);
-
+        c.drawText(context.getText(R.string.activar_desactivar).toString(), x_Texto, y_vibrador+altoImagen/2, getPaint_rosa_claro());
+        c.drawText(context.getText(R.string.vibracion).toString(), x_Texto, y_vibrador+altoImagen/2+getAltoPantalla()/64*2, getPaint_rosa_claro());
+        getPaint_rosa_claro().setTextSize(getAnchoPantalla()/64*3);
     }
 
     /**
-     * Detecta las pulsaciones del usuario sobre la pantalla y realiza la acción correspondiente al botón pulsado.
+     * Maneja las pulsaciones del usuario sobre la pantalla y realiza la acción correspondiente al botón pulsado.
      */
     @Override
     int onTouchEvent(MotionEvent event) {

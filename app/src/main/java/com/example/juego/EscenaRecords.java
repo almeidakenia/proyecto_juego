@@ -50,8 +50,10 @@ public class EscenaRecords extends Escenas {
         }catch (Exception e){
             c.drawColor(Color.MAGENTA);
         }
-        c.drawRect(getMenu(), getPaintBlanco());
-        c.drawText(context.getText(R.string.button_volver).toString(), getAnchoPantalla()/8, getAltoPantalla()/40, getPaintNegro());
+        c.drawRect(getMenu(), getPaint_lila());
+        getPaintBlanco().setTextSize(getAnchoPantalla()/32);
+        c.drawText(context.getText(R.string.button_volver).toString(), getAnchoPantalla()/8, getAltoPantalla()/40, getPaintBlanco());
+        getPaintBlanco().setTextSize(getAnchoPantalla()/16);
         c.drawText(context.getText(R.string.boton_records).toString(),getAnchoPantalla()/2, getAltoPantalla()/20*4, getPaint_azul_claro());
         c.drawText(context.getText(R.string.nivel1).toString()+": "+record1,getAnchoPantalla()/2, getAltoPantalla()/32*13, getPaintBlanco());
         c.drawText(context.getText(R.string.nivel2).toString()+": "+record2,getAnchoPantalla()/2, getAltoPantalla()/32*17, getPaintBlanco());

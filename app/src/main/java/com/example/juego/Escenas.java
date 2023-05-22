@@ -9,14 +9,35 @@ import android.graphics.Rect;
 import android.view.MotionEvent;
 
 public class Escenas {
+    /**
+     * Número de la escena
+     */
     private int numEscena=-1;
+    /**
+     * Alto y ancho de la pantalla
+     */
     private int altoPantalla;
     private int anchoPantalla;
+    /**
+     * Contexto de la aplicación
+     */
     private Context context;
+    /**
+     * Rectángulo que representa botón para volver al menú
+     */
     private Rect menu;
+    /**
+     * Tiempo de duración de la partida
+     */
     private int duracionPartida;
+    /**
+     * Paints de distintos colores
+     */
     private Paint paintBlanco, paintNegro, paint_azul_claro, boton_blanco, paint_morado, paint_morado2, verde_pared, paint_lila, paintMagenta, paint_rosa_claro;
 
+    /**
+     * Escala el bitmap que se recibe en función del nuevo ancho
+     */
     public Bitmap escalaAnchura(Bitmap bitmapAux, int nuevoAncho) {
         if (nuevoAncho==bitmapAux.getWidth()){
             return bitmapAux;
@@ -24,6 +45,14 @@ public class Escenas {
         return bitmapAux.createScaledBitmap(bitmapAux, nuevoAncho, (bitmapAux.getHeight() * nuevoAncho) / bitmapAux.getWidth(), true);
     }
 
+    /**
+     * Constructor de la clase que inicializa las variables.
+     *
+     * @param context         El contexto de la aplicación.
+     * @param anchoPantalla   El ancho de la pantalla.
+     * @param altoPantalla    El alto de la pantalla.
+     * @param numEscena       El número de la escena.
+     */
     public Escenas(Context context, int anchoPantalla, int altoPantalla, int numEscena) {
         this.anchoPantalla = anchoPantalla;
         this.altoPantalla = altoPantalla;
@@ -66,11 +95,6 @@ public class Escenas {
         paint_rosa_claro.setColor(Color.parseColor("#F1DCDC"));
         paint_rosa_claro.setTextAlign(Paint.Align.CENTER);
 
-
-//        paintBlanco.setTextSize(anchoPantalla/16);
-//        paintBlanco.setColor(Color.WHITE);
-//        paintBlanco.setTextAlign(Paint.Align.CENTER);
-
         int colorInt = Color.parseColor("#763B6E");
         paint_lila = new Paint();
         paint_lila.setColor(colorInt);
@@ -86,6 +110,11 @@ public class Escenas {
         paintMagenta.setAlpha(200);
     }
 
+    /**
+     * Detecta las pulsaciones del usuario y cargar la escena correspondiente.
+     * @param event   El evento de toque.
+     * @return El número de la escena.
+     */
     int onTouchEvent(MotionEvent event){
         switch (event.getAction()){
             case MotionEvent.ACTION_DOWN:
@@ -97,12 +126,21 @@ public class Escenas {
         return -1;
     }
 
+    /**
+     * Dibuja sobre en el lienzo proporcionado.
+     */
     public void dibuja(Canvas c){ }
 
+    /**
+     * Actualiza la física de la escena
+     */
     public int actualizaFisica(){
         return 0;
     }
 
+    /**
+     * Setter y getter
+     */
     public int getNumEscena() {
         return numEscena;
     }

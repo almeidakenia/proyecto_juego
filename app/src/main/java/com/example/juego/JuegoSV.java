@@ -15,21 +15,60 @@ import android.view.SurfaceView;
 import androidx.annotation.NonNull;
 
 public class JuegoSV extends SurfaceView implements SurfaceHolder.Callback {
+    /**
+     * SurfaceHolder de la clase
+     */
     private SurfaceHolder surfaceHolder;
+    /**
+     * Contexto de la aplicación
+     */
     private Context context;
+    /**
+     * Valor true o false dependiendo si la aplicación está abierta o no
+     */
     private boolean funcionando= false;
+    /**
+     * Hilo de surface
+     */
     private Hilo hilo;
-    private boolean finJuego=false;
+    /**
+     * Tamaño ancho y alto de la pantalla
+     */
     public static int anchoPantalla;
     public static int altoPantalla;
+    /**
+     * Escena actual que el hilo está ejecutando
+     */
     public static Escenas escenaActual;
+    /**
+     *  Número de la nueva escena
+     */
     private int nuevaEscena;
-    public MediaPlayer mediaPlayer;
-    public AudioManager audioManager;
-    SharedPreferences sp;
-    SharedPreferences.Editor editor;
+    /**
+     * Número de la escena
+     */
     public static int numEscena;
+    /**
+     * MediaPlayer de la música de fondo
+     */
+    public MediaPlayer mediaPlayer;
+    /**
+     * AudioManager de la música de fondo
+     */
+    public AudioManager audioManager;
 
+    /**
+     * Variable que permite acceder a valores almacenados de forma persistente
+     */
+    SharedPreferences sp;
+    /**
+     * Permite realizar modificaciones en el archivo XML de SharedPreferences
+     */
+    SharedPreferences.Editor editor;
+
+    /**
+     * Constructor de la clase que inicializa las variables
+     */
     public JuegoSV(Context context) {
         super(context);
         this.surfaceHolder=getHolder();
@@ -48,6 +87,9 @@ public class JuegoSV extends SurfaceView implements SurfaceHolder.Callback {
         sp.getBoolean("musica_on", true);
     }
 
+    /**
+     *  Inicia el hilo de ejecución del juego y reproduce la música si está activada.
+     */
     @Override
     public void surfaceCreated(@NonNull SurfaceHolder holder) {
         this.funcionando = true;
@@ -65,6 +107,9 @@ public class JuegoSV extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
+    /**
+     * Actualiza el tamaño de la pantalla y la escena actual cuando cambian las dimensiones
+     */
     @Override
     public void surfaceChanged(@NonNull SurfaceHolder holder, int format, int width, int height) {
         this.anchoPantalla=width;
@@ -73,6 +118,9 @@ public class JuegoSV extends SurfaceView implements SurfaceHolder.Callback {
         hilo.setSurfaceSize(width,height);
     }
 
+    /**
+     * Detiene el hilo de ejecución del juego y pausa la reproducción de música.
+     */
     @Override
     public void surfaceDestroyed(@NonNull SurfaceHolder holder) {
         this.funcionando=false;
@@ -84,6 +132,9 @@ public class JuegoSV extends SurfaceView implements SurfaceHolder.Callback {
         mediaPlayer.pause();
     }
 
+    /**
+     * Cambia la escena actual en función del evento y controla la reproducción o pausa de la música.
+     */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         nuevaEscena=escenaActual.onTouchEvent(event);
@@ -94,10 +145,12 @@ public class JuegoSV extends SurfaceView implements SurfaceHolder.Callback {
         }else{
             mediaPlayer.pause();
         }
-
         return true;
     }
 
+    /**
+     * Cambia la escena actual en función del valor de nuevaEscena.
+     */
     public void cambiaEscena(){
         if (escenaActual.getNumEscena()!=nuevaEscena){
             numEscena = escenaActual.getNumEscena();
@@ -114,6 +167,9 @@ public class JuegoSV extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
+    /**
+     * Hilo de ejecución del juego
+     */
     public class Hilo extends Thread{
         @Override
         public void run() {

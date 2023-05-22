@@ -25,7 +25,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
      * Variables que contienen información sobre el acelerómetro
      */
     private float acelerometro, current_acelerometro, last_acelerometro;
-
     /**
      * Detección de eventos del sensor.
      * Implementa el método onSensorChanged para detectar cambios en el valor del acelerómetro.
