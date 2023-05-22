@@ -19,3 +19,7 @@
 - Scripts añadidos: script del personaje principal y cuadrado al final del laberinto que representa la salida o "puerta"
 - Cambios en el archivo strings.xml (directamente desde translations editor") para que todo el juego esté en inglés y en español.
 - Laberinto del nivel 2 cambiado
+
+___
+
+##### Revisar rama "nueva-rama", que es la más actualizada
