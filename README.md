@@ -19,3 +19,9 @@
 - Scripts añadidos: script del personaje principal y cuadrado al final del laberinto que representa la salida o "puerta"
 - Cambios en el archivo strings.xml (directamente desde translations editor") para que todo el juego esté en inglés y en español.
 - Laberinto del nivel 2 cambiado
+
+## Cuarto commit
+
+- Diseño de nuevas paredes en el nivel 2 del juego como futuros obstáculos
+- Pequeños cambios visuales en la aplicación para mejorar la estética
+- Documentación añadida en el código
