@@ -16,7 +16,6 @@ public class Pared {
 
     /**
      * Constructor de la clase que crea una pared
-     *
      * @param bitmap   El bitmap que representa la imagen de la pared.
      * @param hitbox   El rectángulo que define el área ocupada por la pared.
      */
@@ -27,7 +26,6 @@ public class Pared {
 
     /**
      * Dibuja el personaje en el lienzo proporcionado.
-     *
      * @param c  Lienzo en el que se dibujará el personaje.
      */
     public void dibujar(Canvas c){

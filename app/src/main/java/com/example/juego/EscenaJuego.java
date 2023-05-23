@@ -19,58 +19,156 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class EscenaJuego extends Escenas {
+    /**
+     * Variable que permite acceder a valores almacenados de forma persistente
+     */
     SharedPreferences sp;
+    /**
+     * Permite realizar modificaciones en el archivo XML de SharedPreferences
+     */
     SharedPreferences.Editor editor;
+    /**
+     * Vibrador del móvil
+     */
     Vibrator vibrador;
-    boolean pierde;
-    boolean gana;
+    /**
+     * Booleanas que indica si el usuario ha ganado o perdido el juego
+     */
+    boolean pierde, gana;
+    /**
+     * Lista que almacena los murciélagos presentes en el juego
+     */
     private ArrayList<EnemigoMurcielago> murcielagos = new ArrayList<EnemigoMurcielago>();
+    /**
+     * Murciélagos
+     */
     private EnemigoMurcielago murcielago, murcielago2;
+    /**
+     * Imágenes del murciélago
+     */
     Bitmap imagenesMurcielago;
+    /**
+     * Efectos sonoros
+     */
     private SoundPool efecto_sonido;
+    /**
+     * Sonidos del juego
+     */
     private int sonidoWoosh;
+    /**
+     *  Número máximo de sonidos que se pueden reproducir simultáneamente
+     */
     final private int maxSonidosSimultaneos = 1;
+    /**
+     * AudioManager de los efectos sonoros
+     */
     private AudioManager audioManager;
+    /**
+     * Rectángulos que representan botones con distintas opciones
+     */
     private Rect boton_volver_menu;
     private Rect boton_volver_jugar;
     private Rect boton_siguienteNivel;
+    /**
+     * Imagen de fondo de la pantalla
+     */
     private Bitmap fondo;
+    /**
+     * Número de la escena
+     */
     private int numEscena;
+    /**
+     * Imagen de la pared
+     */
     private Bitmap bitmapColor;
+    /**
+     * Personaje del juego
+     */
     private Personaje personaje;
+    /**
+     * Booleanas que determinan la dirección de movimiento del personaje
+     */
     private boolean md = false;
     private boolean mi = false;
     private boolean mar = false;
     private boolean mab = false;
+    /**
+     * Booleana que indica si el personaje está en movimiento
+     */
     private boolean moviendo = false;
+    /**
+     * Lista de paredes
+     */
     private ArrayList<Pared> paredes;
+    /**
+     * Coordenadas táctiles iniciales y finales durante los eventos táctiles en el juego
+     */
     private int xInicial = 0;
     private int yInicial = 0;
     private int xFinal = 0;
     private int yFinal = 0;
-    int xFondo = 0;
+    /**
+     * Lienzo de la escena
+     */
     private Canvas c;
+    /**
+     * Tamaño del ancho y el alto del fondo
+     */
     int anchoFondo;
     int altoFondo;
+    /**
+     * Contexto de la aplicación
+     */
     Context context;
+    /**
+     * Tamaño establecido para fijar el mismo ancho y alto a distintos objetos
+     */
     private int miAncho = getAnchoPantalla()/32;
     private int miAlto =    getAltoPantalla()/64;
+    /**
+     * Tamaño establecido para las paredes
+     */
     private int tamMuro=getAltoPantalla()/64*50-getAltoPantalla()/64*49;
+    /**
+     * Puerta
+     */
     private Puerta puerta;
+    /**
+     * Variables que controlan el tiempo en el juego
+     */
     Timer timer;
     TimerTask task;
     int count = 0;
     int minutos = 0;
     int segundos = 0;
 
+    /**
+     * Crea y devuelve pared horizontal
+     * @param bitmapColor   Imagen de la pared
+     * @param x             Posición en el eje x para la pared
+     * @param y             Posición en el eje y para la pared
+     * @param ancho         Ancho de la pared
+     * @return              Objeto de tipo Pared horizontal
+     */
     public Pared addParedH(Bitmap bitmapColor, int x, int y, int ancho){
         return new Pared(bitmapColor,new Rect(x, y, x+ancho, y+tamMuro));
     }
 
+    /**
+     * Crea y devuelve pared vertical
+     * @param bitmapColor   Imagen de la pared
+     * @param x             Posición en el eje x para la pared
+     * @param y             Posición en el eje y para la pared
+     * @param alto          Alto de la pared
+     * @return              Objeto de tipo Pared vertical
+     */
     public Pared addParedV(Bitmap bitmapColor, int x, int y, int alto){
         return new Pared(bitmapColor,new Rect(x, y, x+tamMuro, y+alto));
     }
 
+    /**
+     * Inicializa la escena de juego y configura todos los elementos necesarios.
+     */
     public void inicializa(){
         count = 0;
         minutos = 0;
@@ -139,6 +237,9 @@ public class EscenaJuego extends Escenas {
 
     }
 
+    /**
+     * Realiza la vibración del dispositivo
+     */
     public void onClickVibracion(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             vibrador.vibrate(VibrationEffect.createOneShot(300, VibrationEffect.DEFAULT_AMPLITUDE));
@@ -147,6 +248,9 @@ public class EscenaJuego extends Escenas {
         }
     }
 
+    /**
+     * Crea las paredes de la escena del juego
+     */
     public void CreacionParedes(){
         paredes.clear();
         paredes.add( addParedH(bitmapColor, miAncho*1,  miAlto*49, miAncho *6));
@@ -197,6 +301,13 @@ public class EscenaJuego extends Escenas {
         paredes.add( addParedH(bitmapColor, miAncho*19, 0, miAncho*3));
     }
 
+    /**
+     * Constructor de la clase.
+     * @param context   Contexto de la aplicación.
+     * @param numEscena Número de la escena.
+     * @param anp       Ancho de la pantalla.
+     * @param alp       Alto de la pantalla.
+     */
     public EscenaJuego(Context context, int numEscena, int anp, int alp) {
         super(context, anp, alp, numEscena);
         this.context=context;
@@ -210,6 +321,10 @@ public class EscenaJuego extends Escenas {
         inicializa();
     }
 
+    /**
+     * Dibuja la escena del juego sobre el lienzo proporcionado
+     * @param c Lienzo en el que se dibujará
+     */
     @Override
     public void dibuja(Canvas c) {
         this.c = c;
@@ -258,6 +373,11 @@ public class EscenaJuego extends Escenas {
         }
     }
 
+    /**
+     * Maneja los eventos táctiles en la escena del juego.
+     * @param event El evento táctil.
+     * @return El número de la escena actual.
+     */
     int onTouchEvent(MotionEvent event) {
         switch (event.getAction()){
             case MotionEvent.ACTION_DOWN:
@@ -346,6 +466,9 @@ public class EscenaJuego extends Escenas {
         return numEscena;
     }
 
+    /**
+     * Actualiza la física los elementos que se están dibujando
+     */
     public int actualizaFisica() {
         if(puerta.colisiona(personaje.getHitbox()) && !gana){
             if(sp.getBoolean("vibracion_on", true) == true){

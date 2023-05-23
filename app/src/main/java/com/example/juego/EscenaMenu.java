@@ -111,7 +111,7 @@ public class EscenaMenu extends Escenas {
     /**
      * Maneja las pulsasiones en la escena del menú.
      *
-     * @param event Objeto que representa el evento táctil.
+     * @param event El evento táctil.
      * @return El número de la escena a la que va a cambiar o el número de escena actual si no se produce ningún cambio.
      */
     int onTouchEvent(MotionEvent event){

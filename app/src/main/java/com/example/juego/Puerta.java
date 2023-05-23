@@ -37,7 +37,6 @@ public class Puerta {
 
     /**
      * Escala el bitmap proporcionado según el nuevo ancho especificado.
-     *
      * @param bitmapAux   El bitmap que se va a escalar.
      * @param nuevoAncho  El nuevo ancho deseado para el bitmap.
      * @return El bitmap escalado.
@@ -51,7 +50,6 @@ public class Puerta {
 
     /**
      * Constructor de la clase que inicializa las variables de la clase.
-     *
      * @param context         El contexto de la aplicación.
      * @param anchoPantalla   El ancho de la pantalla.
      * @param altoPantalla    El alto de la pantalla.
@@ -77,7 +75,6 @@ public class Puerta {
 
     /**
      * Comprueba si la puerta colisiona con el rectángulo proporcionado.
-     *
      * @param r   El rectángulo con el que se desea comprobar la colisión.
      * @return `true` si hay colisión, `false` si no hay colisión.
      */
@@ -87,7 +84,6 @@ public class Puerta {
 
     /**
      * Dibuja la puerta en el lienzo proporcionado.
-     *
      * @param c  Lienzo en el que se dibujará la puerta.
      */
     public void dibujar(Canvas c){

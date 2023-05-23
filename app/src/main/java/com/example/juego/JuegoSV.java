@@ -67,7 +67,8 @@ public class JuegoSV extends SurfaceView implements SurfaceHolder.Callback {
     SharedPreferences.Editor editor;
 
     /**
-     * Constructor de la clase que inicializa las variables
+     * Constructor de la clase que inicializa las variables.
+     * @param context El contexto de la aplicación.
      */
     public JuegoSV(Context context) {
         super(context);
@@ -88,7 +89,8 @@ public class JuegoSV extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     /**
-     *  Inicia el hilo de ejecución del juego y reproduce la música si está activada.
+     * Método llamado cuando se crea la superficie de dibujo. Inicia el hilo de ejecución del juego y reproduce la música si está activada.
+     * @param holder El SurfaceHolder de la superficie de dibujo.
      */
     @Override
     public void surfaceCreated(@NonNull SurfaceHolder holder) {
@@ -107,8 +109,13 @@ public class JuegoSV extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
+
     /**
-     * Actualiza el tamaño de la pantalla y la escena actual cuando cambian las dimensiones
+     * Actualiza el tamaño de la pantalla y la escena actual, y ajusta el tamaño de la superficie del hilo.
+     * @param holder El SurfaceHolder de la superficie de dibujo.
+     * @param format El formato del píxel de la superficie de dibujo.
+     * @param width El nuevo ancho de la superficie de dibujo.
+     * @param height El nuevo alto de la superficie de dibujo.
      */
     @Override
     public void surfaceChanged(@NonNull SurfaceHolder holder, int format, int width, int height) {
@@ -120,6 +127,7 @@ public class JuegoSV extends SurfaceView implements SurfaceHolder.Callback {
 
     /**
      * Detiene el hilo de ejecución del juego y pausa la reproducción de música.
+     * @param holder El SurfaceHolder de la superficie de dibujo.
      */
     @Override
     public void surfaceDestroyed(@NonNull SurfaceHolder holder) {
@@ -134,6 +142,8 @@ public class JuegoSV extends SurfaceView implements SurfaceHolder.Callback {
 
     /**
      * Cambia la escena actual en función del evento y controla la reproducción o pausa de la música.
+     * @param event El evento táctil.
+     * @return Si se ha manejado el evento táctil.
      */
     @Override
     public boolean onTouchEvent(MotionEvent event) {

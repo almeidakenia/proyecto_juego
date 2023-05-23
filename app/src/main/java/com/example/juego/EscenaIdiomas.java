@@ -44,7 +44,10 @@ public class EscenaIdiomas extends Escenas {
     int x_imagenes, y_imagenES, y_imagenEN;
 
     /**
-     * Escala el bitmap que se recibe en función del nuevo ancho
+     * Escala un bitmap proporcionalmente para ajustar su ancho al valor especificado.
+     * @param bitmapAux El bitmap original que se va a escalar.
+     * @param nuevoAncho El nuevo ancho deseado para el bitmap.
+     * @return El bitmap escalado con el nuevo ancho.
      */
     public Bitmap escalaAnchura(Bitmap bitmapAux, int nuevoAncho) {
         if (nuevoAncho==bitmapAux.getWidth()){
@@ -54,7 +57,11 @@ public class EscenaIdiomas extends Escenas {
     }
 
     /**
-     * Constructor de la clase que inicializa las variables
+     * Constructor de la clase que inicializa las variables.
+     * @param context El contexto de la aplicación.
+     * @param numEscena El número de la escena.
+     * @param anp El ancho de la pantalla.
+     * @param alp El alto de la pantalla.
      */
     public EscenaIdiomas(Context context, int numEscena, int anp, int alp) {
         super(context,  anp, alp, numEscena);
@@ -83,7 +90,8 @@ public class EscenaIdiomas extends Escenas {
     }
 
     /**
-     * Dibuja los elementos necesarios en el lienzo del juego
+     * Dibuja sobre el lienzo proporcionado.
+     * @param c  Lienzo en el que se dibujará.
      */
     @Override
     public void dibuja(Canvas c) {
@@ -103,7 +111,8 @@ public class EscenaIdiomas extends Escenas {
     }
 
     /**
-     * Cambia el idioma de la aplicación, utilizando fichero de strings.xml correspondiente
+     * Cambia el idioma de la aplicación utilizando el archivo de strings.xml correspondiente.
+     * @param cod El código del idioma a cambiar.
      */
     public void cambiaIdioma(String cod){
         Resources res = context.getResources();
@@ -114,7 +123,9 @@ public class EscenaIdiomas extends Escenas {
     }
 
     /**
-     * Detecta las pulsaciones del usuario para mostrar el contenido en el idioma correspondiente a la opción pulsada
+     * Detecta las pulsaciones del usuario para mostrar el contenido en el idioma correspondiente a la opción pulsada.
+     * @param event El evento de pulsación táctil.
+     * @return El valor de retorno dependiendo de la opción pulsada.
      */
     @Override
     int onTouchEvent(MotionEvent event) {

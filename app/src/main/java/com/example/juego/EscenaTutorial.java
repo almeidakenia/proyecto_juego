@@ -52,7 +52,10 @@ public class EscenaTutorial extends Escenas{
     int ancho_boton_siguiente;
 
     /**
-     * Escala el bitmap que se recibe en función del nuevo ancho
+     * Escala un bitmap proporcionalmente para ajustar su ancho al valor especificado.
+     * @param bitmap El bitmap original que se va a escalar.
+     * @param nuevoAncho El nuevo ancho para el bitmap.
+     * @return El bitmap escalado con el nuevo ancho.
      */
     public Bitmap escalaAnchura(Bitmap bitmap, int nuevoAncho) {
         Bitmap bitmapAux= bitmap;
@@ -62,7 +65,10 @@ public class EscenaTutorial extends Escenas{
     }
 
     /**
-     * Escala el bitmap que se recibe en función del la nueva altura
+     * Escala un bitmap proporcionalmente para ajustar su altura al valor especificado.
+     * @param bitmap El bitmap original que se va a escalar.
+     * @param nuevoAlto La nueva altura para el bitmap.
+     * @return El bitmap escalado con la nueva altura.
      */
     public Bitmap escalaAltura(Bitmap bitmap, int nuevoAlto ) {
         Bitmap bitmapAux= bitmap;
@@ -72,7 +78,11 @@ public class EscenaTutorial extends Escenas{
     }
 
     /**
-     * Constructor de la clase que inicializa las variables
+     * Constructor de la clase que inicializa las variables de la escena de tutorial.
+     * @param context El contexto de la aplicación.
+     * @param numEscena El número de la escena.
+     * @param anp El ancho de la pantalla.
+     * @param alp El alto de la pantalla.
      */
     public EscenaTutorial(Context context, int numEscena, int anp, int alp) {
         super(context,  anp, alp, numEscena);
@@ -120,7 +130,8 @@ public class EscenaTutorial extends Escenas{
     }
 
     /**
-     * Función que dibuja los botones y las imágenes correspondientes sobre el lienzo de la aplicación
+     * Dibuja botones e imágenes correspondientes sobre en el lienzo proporcionado.
+     * @param c Lienzo en el que se dibujará
      */
     @Override
     public void dibuja(Canvas c) {
@@ -137,7 +148,9 @@ public class EscenaTutorial extends Escenas{
     }
 
     /**
-     * Detecta las pulsaciones del usuario para cambiar la imagen mostrada.
+     * Maneja los eventos táctiles en la escena del juego.
+     * @param event El evento táctil.
+     * @return El valor de retorno dependiendo de la acción realizada.
      */
     @Override
     int onTouchEvent(MotionEvent event) {

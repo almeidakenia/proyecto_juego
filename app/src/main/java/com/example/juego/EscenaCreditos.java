@@ -21,7 +21,11 @@ public class EscenaCreditos extends Escenas {
     private Context context;
 
     /**
-     * Constructor de la clase que inicializa las variables
+     * Constructor de la clase que inicializa las variables.
+     * @param context El contexto de la aplicación.
+     * @param numEscena El número de la escena.
+     * @param anp El ancho de la pantalla.
+     * @param alp El alto de la pantalla.
      */
     public EscenaCreditos(Context context, int numEscena, int anp, int alp) {
         super(context,  anp, alp, numEscena);
@@ -32,7 +36,8 @@ public class EscenaCreditos extends Escenas {
     }
 
     /**
-     * Método que dibuja el todos los elementos visuales de la pantalla créditos. Estos son: fondo, botón y textos.
+     * Dibuja sobre el lienzo proporcionado.
+     * @param c  Lienzo en el que se dibujará.
      */
     @Override
     public void dibuja(Canvas c) {

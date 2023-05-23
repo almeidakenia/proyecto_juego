@@ -4,11 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Rect;
-import android.util.Log;
-import android.view.MotionEvent;
 
 public class Personaje {
     /**
@@ -44,7 +40,10 @@ public class Personaje {
     private Rect hitbox;
 
     /**
-     * Escala el bitmap que se recibe en función del nuevo ancho
+     * Escala un bitmap proporcionalmente para ajustar su ancho al valor especificado.
+     * @param bitmapAux El bitmap original que se va a escalar.
+     * @param nuevoAncho El nuevo ancho deseado para el bitmap.
+     * @return El bitmap escalado con el nuevo ancho.
      */
     public Bitmap escalaAnchura(Bitmap bitmapAux, int nuevoAncho) {
         if (nuevoAncho==bitmapAux.getWidth()){
@@ -109,7 +108,6 @@ public class Personaje {
 
     /**
      * Dibuja el personaje en el lienzo proporcionado.
-     *
      * @param c  Lienzo en el que se dibujará el personaje.
      */
     public void dibujar(Canvas c){
@@ -122,7 +120,6 @@ public class Personaje {
     public void mueveDerecha(){
         this.x += velocidad;
         actualizaRect();
-
     }
 
     /**
@@ -131,7 +128,6 @@ public class Personaje {
     public void mueveIzquierda(){
         this.x -= velocidad;
         actualizaRect();
-
     }
 
     /**
@@ -140,7 +136,6 @@ public class Personaje {
     public void mueveArriba(){
         this.y -= velocidad;
         actualizaRect();
-
     }
 
     /**
@@ -149,7 +144,6 @@ public class Personaje {
     public void mueveAbajo(){
         this.y += velocidad;
         actualizaRect();
-
     }
 
     /**

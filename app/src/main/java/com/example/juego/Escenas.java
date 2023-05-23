@@ -36,7 +36,10 @@ public class Escenas {
     private Paint paintBlanco, paintNegro, paint_azul_claro, boton_blanco, paint_morado, paint_morado2, verde_pared, paint_lila, paintMagenta, paint_rosa_claro;
 
     /**
-     * Escala el bitmap que se recibe en función del nuevo ancho
+     * Escala un bitmap proporcionalmente para ajustar su ancho al valor especificado.
+     * @param bitmapAux El bitmap original que se va a escalar.
+     * @param nuevoAncho El nuevo ancho para el bitmap.
+     * @return El bitmap escalado con el nuevo ancho.
      */
     public Bitmap escalaAnchura(Bitmap bitmapAux, int nuevoAncho) {
         if (nuevoAncho==bitmapAux.getWidth()){
@@ -128,6 +131,7 @@ public class Escenas {
 
     /**
      * Dibuja sobre en el lienzo proporcionado.
+     * @param c Lienzo en el que se dibujará
      */
     public void dibuja(Canvas c){ }
 

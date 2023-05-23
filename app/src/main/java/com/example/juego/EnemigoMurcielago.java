@@ -71,9 +71,12 @@ public class EnemigoMurcielago {
     int tickFrame = 50;
 
     /**
-     * Escala el bitmap que se recibe en función del nuevo ancho
+     * Escala un bitmap proporcionalmente para ajustar su ancho al valor especificado.
+     * @param bitmapAux El bitmap original que se va a escalar.
+     * @param nuevoAncho El nuevo ancho deseado para el bitmap.
+     * @return El bitmap escalado con el nuevo ancho.
      */
-    public Bitmap escalaAnchura(Context context, Bitmap bitmapAux, int nuevoAncho) {
+    public Bitmap escalaAnchura(Bitmap bitmapAux, int nuevoAncho) {
         if (nuevoAncho==bitmapAux.getWidth()){
             return bitmapAux;
         }
@@ -81,7 +84,10 @@ public class EnemigoMurcielago {
     }
 
     /**
-     * Método para reflejar una imagen horizontal o verticalmente.
+     * Crea una imagen espejo del bitmap proporcionado.
+     * @param imagen El bitmap original.
+     * @param horizontal Indica si el espejo debe ser horizontal (true) o vertical (false).
+     * @return El bitmap con la imagen espejo.
      */
     public Bitmap espejo(Bitmap imagen, Boolean horizontal){
         Matrix matrix = new Matrix();
@@ -95,7 +101,14 @@ public class EnemigoMurcielago {
     }
 
     /**
-     * Constructor de la clase que inicializa las variables
+     * Constructor de la clase que inicializa las variables.
+     * @param context El contexto de la aplicación.
+     * @param imagenes El bitmap con las imágenes del murciélago.
+     * @param anchoPantalla El ancho de la pantalla.
+     * @param altoPantalla El alto de la pantalla.
+     * @param x La posición inicial en el eje X del murciélago.
+     * @param y La posición inicial en el eje Y del murciélago.
+     * @param velocidad La velocidad del murciélago.
      */
     public EnemigoMurcielago(Context context, Bitmap imagenes,int anchoPantalla, int altoPantalla, float x, float y, int velocidad) {
         this.context = context;
@@ -110,7 +123,7 @@ public class EnemigoMurcielago {
         imagenesVolarIzquierda = new Bitmap[8];
         for(int i = 0; i < imagenesVolarDerecha.length; i++){
             imagenesVolarDerecha[i] = Bitmap.createBitmap(imagenes, (int) i*imagenes.getWidth()/8, 0, (int) anchoImagenes/8, (int) altoImagenes);
-            imagenesVolarDerecha[i] = escalaAnchura(context, imagenesVolarDerecha[i], anchoPantalla/32*4);
+            imagenesVolarDerecha[i] = escalaAnchura(imagenesVolarDerecha[i], anchoPantalla/32*4);
         }
         for(int i = 0; i < imagenesVolarIzquierda.length; i++){
             imagenesVolarIzquierda[i] = espejo(imagenesVolarDerecha[i], true);
@@ -121,7 +134,8 @@ public class EnemigoMurcielago {
     }
 
     /**
-     * Dibuja el murciélago en el lienzo del juego
+     * Dibuja el murciélago en el lienzo proporcionado.
+     * @param c  Lienzo en el que se dibujará el murciélago.
      */
     public void dibujar(Canvas c){
         c.drawBitmap(imagenesVolar[frame],posicion.x,posicion.y, null);

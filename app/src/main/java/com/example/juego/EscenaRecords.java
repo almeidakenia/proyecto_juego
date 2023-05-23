@@ -9,25 +9,29 @@ import android.graphics.Color;
 
 public class EscenaRecords extends Escenas {
     /**
-     * Número de la escena de la pantalla récords
+     * Número de la escena de la pantalla récords.
      */
     private int numEscena=4;
     /**
-     * Imagen de fondo de la pantalla
+     * Imagen de fondo de la pantalla.
      */
     private Bitmap fondo;
     /**
-     * Récord de tiempo de los distintos niveles del juego
+     * Récord de tiempo de los distintos niveles del juego.
      */
     private int record1 = 0;
     private int record2 = 0;
     /**
-     * Contexto de la aplicación
+     * Contexto de la aplicación.
      */
     private Context context;
 
     /**
-     * Constructor de la clase que inicializa las variables
+     * Constructor de la clase que inicializa las variables de la escena de records.
+     * @param context El contexto de la aplicación.
+     * @param numEscena El número de la escena.
+     * @param anp El ancho de la pantalla.
+     * @param alp El alto de la pantalla.
      */
     public EscenaRecords(Context context, int numEscena, int anp, int alp) {
         super(context,  anp, alp, numEscena);
@@ -41,7 +45,8 @@ public class EscenaRecords extends Escenas {
     }
 
     /**
-     * Método que dibuja todos los elementos visuales de la pantalla récords
+     * Dibuja todos los elementos visuales en el lienzo proporcionado.
+     * @param c  Lienzo sobre el que se dibujará.
      */
     @Override
     public void dibuja(Canvas c) {

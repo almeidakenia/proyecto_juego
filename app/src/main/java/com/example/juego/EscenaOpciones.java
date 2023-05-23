@@ -58,7 +58,10 @@ public class EscenaOpciones extends Escenas {
     SharedPreferences.Editor editor;
 
     /**
-     * Escala el bitmap que se recibe en función del nuevo ancho
+     * Escala un bitmap proporcionalmente para ajustar su ancho al valor especificado.
+     * @param bitmapAux El bitmap original que se va a escalar.
+     * @param nuevoAncho El nuevo ancho deseado para el bitmap.
+     * @return El bitmap escalado con el nuevo ancho.
      */
     public Bitmap escalaAnchura(Bitmap bitmapAux, int nuevoAncho) {
         if (nuevoAncho==bitmapAux.getWidth()){
@@ -68,7 +71,11 @@ public class EscenaOpciones extends Escenas {
     }
 
     /**
-     * Constructor que instancia la clase
+     * Constructor de la clase que inicializa las variables.
+     * @param context El contexto de la aplicación.
+     * @param numEscena El número de la escena.
+     * @param anp El ancho de la pantalla.
+     * @param alp El alto de la pantalla.
      */
     public EscenaOpciones(Context context, int numEscena, int anp, int alp) {
         super(context, anp, alp, numEscena);
@@ -123,7 +130,8 @@ public class EscenaOpciones extends Escenas {
     }
 
     /**
-     * Método que dibuja todos los elementos visuales de la pantalla opciones
+     * Dibuja sobre el lienzo proporcionado.
+     * @param c  Lienzo en el que se dibujará.
      */
     @Override
     public void dibuja(Canvas c) {
@@ -155,7 +163,9 @@ public class EscenaOpciones extends Escenas {
     }
 
     /**
-     * Maneja las pulsaciones del usuario sobre la pantalla y realiza la acción correspondiente al botón pulsado.
+     * Detecta las pulsaciones del usuario para mostrar el contenido en el idioma correspondiente a la opción pulsada.
+     * @param event El evento de pulsación táctil.
+     * @return El valor de retorno dependiendo de la opción pulsada.
      */
     @Override
     int onTouchEvent(MotionEvent event) {
