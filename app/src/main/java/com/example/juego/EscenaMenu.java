@@ -70,6 +70,10 @@ public class EscenaMenu extends Escenas {
         editor = sp.edit();
         escenaJuego = 7;
 
+        editor.putBoolean("nivel1", false);
+        editor.putBoolean("nivel2", false);
+        editor.commit();
+
         imagenTutorial = BitmapFactory.decodeResource(context.getResources(), R.drawable.imagen_tutorial);
         anchoImagen = getAnchoPantalla()/32*7;
         x_tutorial = getAnchoPantalla()-anchoImagen-getAnchoPantalla()/64*2;

@@ -3,6 +3,7 @@ package com.example.juego;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -15,6 +16,18 @@ import android.view.WindowManager;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
+    /**
+     * Variable que permite acceder a valores almacenados de forma persistente
+     */
+    SharedPreferences sp;
+    /**
+     * Permite realizar modificaciones en el archivo XML de SharedPreferences
+     */
+    SharedPreferences.Editor editor;
+//    /**
+//     * Contexto de la aplicación
+//     */
+//    Context context;
     /**
      * SensorManager
      * Sensor que obtiene los datos del hardware del móvil
@@ -36,12 +49,19 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             float y = event.values[1];
             float z = event.values[2];
 
+            sp = getApplicationContext().getSharedPreferences("datos", Context.MODE_PRIVATE);
             last_acelerometro = acelerometro;
             current_acelerometro = (float) Math.sqrt((double) (x * x + y * y + z * z));
             float delta = current_acelerometro - acelerometro;
             acelerometro = acelerometro * 0.9f + delta;
             if(acelerometro > 12){  //AQUÍ ES DONDE CONTROLO QUÉ VA OCURRIR AL AGITAR EL MÓVIL
-                JuegoSV.escenaActual = new EscenaJuego2(getApplicationContext(), 8, JuegoSV.anchoPantalla, JuegoSV.altoPantalla);
+                if(sp.getBoolean("vibracion_on", true) == true){
+                    if(sp.getBoolean("nivel1", true) == true){
+                        JuegoSV.escenaActual = new EscenaJuego(getApplicationContext(), 7, JuegoSV.anchoPantalla, JuegoSV.altoPantalla);
+                    }else if(sp.getBoolean("nivel2", true) == true){
+                        JuegoSV.escenaActual = new EscenaJuego2(getApplicationContext(), 8, JuegoSV.anchoPantalla, JuegoSV.altoPantalla);
+                    }
+                }
             }
         }
 
@@ -54,6 +74,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        context = this;
 
         JuegoSV juego=new JuegoSV(this);
 

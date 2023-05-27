@@ -200,9 +200,9 @@ public class EscenaJuego2 extends Escenas {
         sp = context.getSharedPreferences("datos", Context.MODE_PRIVATE);
         editor = sp.edit();
 
-//        editor.putBoolean("nivel1", false);
-//        editor.putBoolean("nivel2", true);
-//        editor.commit();
+        editor.putBoolean("nivel1", false);
+        editor.putBoolean("nivel2", true);
+        editor.commit();
 
         audioManager=(AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
 

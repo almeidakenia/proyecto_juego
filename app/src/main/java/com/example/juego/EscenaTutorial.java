@@ -144,7 +144,10 @@ public class EscenaTutorial extends Escenas{
         c.drawBitmap(boton_siguiente, anchoPantalla-ancho_boton_siguiente,altoPantalla/10*4,null);
 
         c.drawRect(getMenu(), getPaintBlanco());
-        c.drawText(context.getText(R.string.button_volver).toString(), getAnchoPantalla()/8, getAltoPantalla()/40, getPaintNegro());
+        c.drawRect(getMenu(), getPaint_lila());
+        getPaintBlanco().setTextSize(getAnchoPantalla()/32);
+        c.drawText(context.getText(R.string.button_volver).toString(), getAnchoPantalla()/8, getAltoPantalla()/40, getPaintBlanco());
+        getPaintBlanco().setTextSize(getAnchoPantalla()/16);
     }
 
     /**
