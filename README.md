@@ -25,3 +25,8 @@
 - Diseño de nuevas paredes en el nivel 2 del juego como futuros obstáculos
 - Pequeños cambios visuales en la aplicación para mejorar la estética
 - Documentación añadida en el código
+
+## Quinto commit 
+
+- Cambios en el aspecto visual de la pantalla Récords
+- Cambios en el funcionamiento del acelerómetro: Ahora solo vuelve a empezar el juego en el nivel 1 o 2 si el usuario se encuentre en alguna de esas pantallas.
