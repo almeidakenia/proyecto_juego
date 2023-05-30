@@ -37,7 +37,7 @@ public class EscenaTutorial extends Escenas{
     /**
      * Imágenes de explicación del juego
      */
-    Bitmap fondo1, fondo2, fondo3, fondo4, fondo5;
+    Bitmap fondo1, fondo2, fondo3, fondo4, fondo5, fondo6;
     /**
      * Ancho y alto de la pantalla
      */
@@ -111,17 +111,19 @@ public class EscenaTutorial extends Escenas{
         fondo5 = escalaAltura(aux,altoPantalla);
         fondo5 = escalaAnchura(fondo5,anchoPantalla);
 
+        aux = BitmapFactory.decodeResource(context.getResources(), R.drawable.obstaculos);
+        fondo6 = escalaAltura(aux,altoPantalla);
+        fondo6 = escalaAnchura(fondo5,anchoPantalla);
+
         aux = BitmapFactory.decodeResource(context.getResources(), R.drawable.boton_siguiente);
-//        boton_siguiente = escalaAnchura(aux, anchoPantalla/8);
         boton_siguiente = escalaAltura(aux,altoPantalla/10);
         ancho_boton_siguiente = boton_siguiente.getWidth();
 
+//        int x = anchoPantalla-anchoPantalla/20*3;
+//        int y = altoPantalla/10*6;
 
-        int x = anchoPantalla-anchoPantalla/20*3;
-        int y = altoPantalla/10*6;
-
-        x = anchoPantalla-ancho_boton_siguiente;
-        y = altoPantalla/10*4;
+        int x = anchoPantalla-ancho_boton_siguiente;
+        int y = altoPantalla/10*4;
 
         siguiente_pagina = new Rect(x,y,x+ boton_siguiente.getWidth(),y+boton_siguiente.getHeight());
 
@@ -167,6 +169,7 @@ public class EscenaTutorial extends Escenas{
                         if (numpag==3) fondo = fondo3;
                         if (numpag==4) fondo = fondo4;
                         if (numpag==5) fondo = fondo5;
+                        if (numpag==6) fondo = fondo6;
                     }else{
                         return 1;
                     }

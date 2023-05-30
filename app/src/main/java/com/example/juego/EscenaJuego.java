@@ -176,6 +176,24 @@ public class EscenaJuego extends Escenas {
         pierde = false;
         gana = false;
 
+        timer = new Timer();
+        task = new TimerTask() {
+            public void run() {
+                if(pierde || gana){
+                    timer.cancel();
+                }else{
+                    count++;
+                    if(count < 60){
+                        segundos = count;
+                    }else{
+                        minutos = count / 60;
+                        segundos = count % 60;
+                    }
+                }
+            }
+        };
+        timer.schedule(task, 0, 1000);
+
         xInicial = 0;
         yInicial = 0;
         xFinal = 0;
@@ -215,23 +233,7 @@ public class EscenaJuego extends Escenas {
         this.boton_volver_jugar = new Rect(miAncho*7, miAlto*25, miAncho*25, miAlto*30);
         this.boton_siguienteNivel =new Rect(miAncho*7, miAlto*34, miAncho*25, miAlto*39);
         this.boton_volver_menu = new Rect(miAncho*7, miAlto*43, miAncho*25, miAlto*48);
-        timer = new Timer();
-        task = new TimerTask() {
-            public void run() {
-                if(pierde || gana){
-                    timer.cancel();
-                }else{
-                    count++;
-                    if(count < 60){
-                        segundos = count;
-                    }else{
-                        minutos = count / 60;
-                        segundos = count % 60;
-                    }
-                }
-            }
-        };
-        timer.schedule(task, 0, 1000);
+
         CreacionParedes();
         vibrador = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
 
@@ -568,4 +570,5 @@ public class EscenaJuego extends Escenas {
         }
         return 0;
     }
+
 }

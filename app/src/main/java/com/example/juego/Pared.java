@@ -25,8 +25,8 @@ public class Pared {
     }
 
     /**
-     * Dibuja el personaje en el lienzo proporcionado.
-     * @param c  Lienzo en el que se dibujará el personaje.
+     * Dibuja la pared en el lienzo proporcionado.
+     * @param c  Lienzo en el que se dibujará la pared.
      */
     public void dibujar(Canvas c){
         c.drawBitmap(bitmap, hitbox.left, hitbox.top, null);
