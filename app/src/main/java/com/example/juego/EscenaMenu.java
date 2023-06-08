@@ -12,22 +12,6 @@ import android.view.MotionEvent;
 
 public class EscenaMenu extends Escenas {
     /**
-     * Variable que permite acceder a valores almacenados de forma persistente
-     */
-    SharedPreferences sp;
-    /**
-     * Permite realizar modificaciones en el archivo XML de SharedPreferences
-     */
-    SharedPreferences.Editor editor;
-    /**
-     * Imagen de fondo de la pantalla
-     */
-    private Bitmap fondo;
-    /**
-     * Número de la escena
-     */
-    private int numEscena=7;
-    /**
      * Número de la escena de juego
      */
     private int escenaJuego;
@@ -35,10 +19,6 @@ public class EscenaMenu extends Escenas {
      * Rectángulos que representan botones
      */
     private RectF op1,op2, op3, op4, op5;
-    /**
-     * Contexto de la aplicación
-     */
-    private Context context;
     /**
      * Ancho y alto de la imagen tutorial
      */
@@ -62,12 +42,6 @@ public class EscenaMenu extends Escenas {
      */
     public EscenaMenu(Context context, int numEscena, int anp, int alp) {
         super(context,  anp, alp, numEscena);
-        this.context = context;
-        this.numEscena=numEscena;
-        fondo = BitmapFactory.decodeResource(context.getResources(), R.drawable.fondo_movil);
-        fondo = Bitmap.createScaledBitmap(fondo, getAnchoPantalla(), getAltoPantalla(), true);
-        sp = context.getSharedPreferences("datos", Context.MODE_PRIVATE);
-        editor = sp.edit();
         escenaJuego = 7;
 
         editor.putBoolean("nivel1", false);
@@ -95,20 +69,20 @@ public class EscenaMenu extends Escenas {
      */
     public void dibuja(Canvas c){
         try{
-            c.drawBitmap(fondo, 0, 0, null);
+            c.drawBitmap(getFondo(), 0, 0, null);
         }catch (Exception e){
             c.drawColor(Color.MAGENTA);
         }
         c.drawText("Survive The Maze",getAnchoPantalla()/2, getAltoPantalla()/40*9, getPaint_morado());
         float cornerRadius = 40;
         c.drawRoundRect(op1, cornerRadius, cornerRadius, getPaint_morado2());
-        c.drawText(context.getText(R.string.boton_EmpezarJuego).toString(),getAnchoPantalla()/2, getAltoPantalla()/20*7, getPaint_rosa_claro());
+        c.drawText(getContext().getText(R.string.boton_EmpezarJuego).toString(),getAnchoPantalla()/2, getAltoPantalla()/20*7, getPaint_rosa_claro());
         c.drawRoundRect(op2, cornerRadius, cornerRadius, getPaint_morado2());
-        c.drawText(context.getText(R.string.boton_opciones).toString(),getAnchoPantalla()/2, getAltoPantalla()/20*10, getPaint_rosa_claro());
+        c.drawText(getContext().getText(R.string.boton_opciones).toString(),getAnchoPantalla()/2, getAltoPantalla()/20*10, getPaint_rosa_claro());
         c.drawRoundRect(op3, cornerRadius, cornerRadius, getPaint_morado2());
-        c.drawText(context.getText(R.string.boton_records).toString(),getAnchoPantalla()/2, getAltoPantalla()/20*13, getPaint_rosa_claro());
+        c.drawText(getContext().getText(R.string.boton_records).toString(),getAnchoPantalla()/2, getAltoPantalla()/20*13, getPaint_rosa_claro());
         c.drawRoundRect(op4, cornerRadius, cornerRadius, getPaint_morado2());
-        c.drawText(context.getText(R.string.boton_creditos).toString(),getAnchoPantalla()/2, getAltoPantalla()/20*16, getPaint_rosa_claro());
+        c.drawText(getContext().getText(R.string.boton_creditos).toString(),getAnchoPantalla()/2, getAltoPantalla()/20*16, getPaint_rosa_claro());
         c.drawBitmap(imagenTutorial, x_tutorial, y_tutorial, null);
     }
 
@@ -125,7 +99,7 @@ public class EscenaMenu extends Escenas {
 
         switch (event.getAction()){
             case MotionEvent.ACTION_DOWN:
-                if (aux!=this.numEscena && aux!=-1) return aux;
+                if (aux!=getNumEscena() && aux!=-1) return aux;
 
                 if (op1.contains(x,y))return escenaJuego;
                 else if (op2.contains(x,y))return 2;
@@ -134,6 +108,6 @@ public class EscenaMenu extends Escenas {
                 else if (op5.contains(x,y))return 6;
                 break;
         }
-        return this.numEscena;
+        return getNumEscena();
     }
 }

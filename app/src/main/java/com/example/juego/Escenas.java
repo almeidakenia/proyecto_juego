@@ -1,7 +1,9 @@
 package com.example.juego;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -9,6 +11,15 @@ import android.graphics.Rect;
 import android.view.MotionEvent;
 
 public class Escenas {
+    private Bitmap fondo;
+    /**
+     * Variable que permite acceder a valores almacenados de forma persistente
+     */
+    SharedPreferences sp;
+    /**
+     * Permite realizar modificaciones en el archivo XML de SharedPreferences
+     */
+    SharedPreferences.Editor editor;
     /**
      * Número de la escena
      */
@@ -61,6 +72,12 @@ public class Escenas {
         this.altoPantalla = altoPantalla;
         this.context = context;
         this.numEscena=numEscena;
+        fondo = BitmapFactory.decodeResource(context.getResources(), R.drawable.fondo_movil);
+        fondo = Bitmap.createScaledBitmap(fondo, getAnchoPantalla(), getAltoPantalla(), true);
+
+        sp = context.getSharedPreferences("datos", Context.MODE_PRIVATE);
+        editor = sp.edit();
+
         this.menu = new Rect(0,0,anchoPantalla/4, altoPantalla/20);
 
         paintBlanco =new Paint();
@@ -123,7 +140,11 @@ public class Escenas {
             case MotionEvent.ACTION_DOWN:
                 int x=(int)event.getX();
                 int y=(int)event.getY();
-                if (numEscena!=1)   if (menu.contains(x,y)) return 1;
+                if (numEscena!=1){
+                    if (menu.contains(x,y)){
+                        return 1;
+                    }
+                }
                 break;
         }
         return -1;
@@ -133,7 +154,17 @@ public class Escenas {
      * Dibuja sobre en el lienzo proporcionado.
      * @param c Lienzo en el que se dibujará
      */
-    public void dibuja(Canvas c){ }
+    public void dibuja(Canvas c){
+        try{
+            c.drawBitmap(fondo, 0, 0, null);
+        }catch (Exception e){
+            c.drawColor(Color.MAGENTA);
+        }
+        c.drawRect(menu, getPaint_lila());
+        paintBlanco.setTextSize(anchoPantalla/32);
+        c.drawText(context.getText(R.string.button_volver).toString(), anchoPantalla/8, altoPantalla/40, paintBlanco);
+        paintBlanco.setTextSize(anchoPantalla/16);
+    }
 
     /**
      * Actualiza la física de la escena
@@ -247,5 +278,25 @@ public class Escenas {
 
     public void setPaint_rosa_claro(Paint paint_rosa_claro) {
         this.paint_rosa_claro = paint_rosa_claro;
+    }
+
+    public Bitmap getFondo() {
+        return fondo;
+    }
+
+    public SharedPreferences getSp() {
+        return sp;
+    }
+
+    public void setSp(SharedPreferences sp) {
+        this.sp = sp;
+    }
+
+    public SharedPreferences.Editor getEditor() {
+        return editor;
+    }
+
+    public void setEditor(SharedPreferences.Editor editor) {
+        this.editor = editor;
     }
 }

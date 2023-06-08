@@ -11,17 +11,9 @@ import android.view.MotionEvent;
 
 public class EscenaTutorial extends Escenas{
     /**
-     * Número de la escena de la pantalla tutorial
-     */
-    private int numEscena;
-    /**
      * Imagen de fondo de la pantalla
      */
     private Bitmap fondo;
-    /**
-     * Contexto de la aplicación
-     */
-    private Context context;
     /**
      * Imagen de flecha para avanzar
      */
@@ -38,10 +30,6 @@ public class EscenaTutorial extends Escenas{
      * Imágenes de explicación del juego
      */
     Bitmap fondo1, fondo2, fondo3, fondo4, fondo5, fondo6;
-    /**
-     * Ancho y alto de la pantalla
-     */
-    int anchoPantalla, altoPantalla;
     /**
      * Número de la imagen que se muestra
      */
@@ -86,44 +74,40 @@ public class EscenaTutorial extends Escenas{
      */
     public EscenaTutorial(Context context, int numEscena, int anp, int alp) {
         super(context,  anp, alp, numEscena);
-        this.numEscena=numEscena;
-        this.context=context;
-        this.anchoPantalla = anp;
-        this.altoPantalla = alp;
 
         aux = BitmapFactory.decodeResource(context.getResources(), R.drawable.tut_derecha_es);
-        fondo1 = escalaAltura(aux,altoPantalla);
-        fondo1 = escalaAnchura(fondo1,anchoPantalla);
+        fondo1 = escalaAltura(aux,alp);
+        fondo1 = escalaAnchura(fondo1,anp);
 
         aux = BitmapFactory.decodeResource(context.getResources(), R.drawable.tut_arriba_es);
-        fondo2 = escalaAltura(aux,altoPantalla);
-        fondo2 = escalaAnchura(fondo2,anchoPantalla);
+        fondo2 = escalaAltura(aux,alp);
+        fondo2 = escalaAnchura(fondo2,anp);
 
         aux = BitmapFactory.decodeResource(context.getResources(), R.drawable.tut_izq_es);
-        fondo3 = escalaAltura(aux,altoPantalla);
-        fondo3 = escalaAnchura(fondo3,anchoPantalla);
+        fondo3 = escalaAltura(aux,alp);
+        fondo3 = escalaAnchura(fondo3,anp);
 
         aux = BitmapFactory.decodeResource(context.getResources(), R.drawable.tut_abajo_es);
-        fondo4 = escalaAltura(aux,altoPantalla);
-        fondo4 = escalaAnchura(fondo4,anchoPantalla);
+        fondo4 = escalaAltura(aux,alp);
+        fondo4 = escalaAnchura(fondo4,anp);
 
         aux = BitmapFactory.decodeResource(context.getResources(), R.drawable.tut_obj_es);
-        fondo5 = escalaAltura(aux,altoPantalla);
-        fondo5 = escalaAnchura(fondo5,anchoPantalla);
+        fondo5 = escalaAltura(aux,alp);
+        fondo5 = escalaAnchura(fondo5,anp);
 
         aux = BitmapFactory.decodeResource(context.getResources(), R.drawable.obstaculos);
-        fondo6 = escalaAltura(aux,altoPantalla);
-        fondo6 = escalaAnchura(fondo5,anchoPantalla);
+        fondo6 = escalaAltura(aux,alp);
+        fondo6 = escalaAnchura(fondo5,anp);
 
         aux = BitmapFactory.decodeResource(context.getResources(), R.drawable.boton_siguiente);
-        boton_siguiente = escalaAltura(aux,altoPantalla/10);
+        boton_siguiente = escalaAltura(aux,alp/10);
         ancho_boton_siguiente = boton_siguiente.getWidth();
 
 //        int x = anchoPantalla-anchoPantalla/20*3;
 //        int y = altoPantalla/10*6;
 
-        int x = anchoPantalla-ancho_boton_siguiente;
-        int y = altoPantalla/10*4;
+        int x = anp-ancho_boton_siguiente;
+        int y = alp/10*4;
 
         siguiente_pagina = new Rect(x,y,x+ boton_siguiente.getWidth(),y+boton_siguiente.getHeight());
 
@@ -143,12 +127,12 @@ public class EscenaTutorial extends Escenas{
             c.drawColor(Color.MAGENTA);
         }
         c.drawRect(siguiente_pagina,getPaintNegro());
-        c.drawBitmap(boton_siguiente, anchoPantalla-ancho_boton_siguiente,altoPantalla/10*4,null);
+        c.drawBitmap(boton_siguiente, getAnchoPantalla()-ancho_boton_siguiente,getAltoPantalla()/10*4,null);
 
         c.drawRect(getMenu(), getPaintBlanco());
         c.drawRect(getMenu(), getPaint_lila());
         getPaintBlanco().setTextSize(getAnchoPantalla()/32);
-        c.drawText(context.getText(R.string.button_volver).toString(), getAnchoPantalla()/8, getAltoPantalla()/40, getPaintBlanco());
+        c.drawText(getContext().getText(R.string.button_volver).toString(), getAnchoPantalla()/8, getAltoPantalla()/40, getPaintBlanco());
         getPaintBlanco().setTextSize(getAnchoPantalla()/16);
     }
 

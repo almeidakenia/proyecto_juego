@@ -12,18 +12,6 @@ import android.view.MotionEvent;
 
 public class EscenaOpciones extends Escenas {
     /**
-     * Número de la escena de opciones
-     */
-    private int numEscena;
-    /**
-     * Contexto de la aplicación
-     */
-    Context context;
-    /**
-     * Imagen de fondo de la pantalla
-     */
-    private Bitmap fondo;
-    /**
      * Imágenes para los iconos con las distintas opciones
      */
     Bitmap imagenenMusica, imagenSonido, imagenVibrador, imagenIdioma;
@@ -48,14 +36,6 @@ public class EscenaOpciones extends Escenas {
      * Ancho de las imágenes
      */
     int anchoImagenes;
-    /**
-     * Variable que permite acceder a valores almacenados de forma persistente
-     */
-    SharedPreferences sp;
-    /**
-     * Permite realizar modificaciones en el archivo XML de SharedPreferences
-     */
-    SharedPreferences.Editor editor;
 
     /**
      * Escala un bitmap proporcionalmente para ajustar su ancho al valor especificado.
@@ -79,13 +59,6 @@ public class EscenaOpciones extends Escenas {
      */
     public EscenaOpciones(Context context, int numEscena, int anp, int alp) {
         super(context, anp, alp, numEscena);
-        this.context = context;
-        this.numEscena=numEscena;
-        fondo = BitmapFactory.decodeResource(context.getResources(), R.drawable.fondo_movil);
-        fondo = Bitmap.createScaledBitmap(fondo, getAnchoPantalla(), getAltoPantalla(), true);
-
-        sp = context.getSharedPreferences("datos", Context.MODE_PRIVATE);
-        editor = sp.edit();
 
         anchoImagenes = getAnchoPantalla()/32*7;
 
@@ -135,30 +108,22 @@ public class EscenaOpciones extends Escenas {
      */
     @Override
     public void dibuja(Canvas c) {
-        try{
-            c.drawBitmap(fondo, 0, 0, null);
-        }catch (Exception e){
-            c.drawColor(Color.MAGENTA);
-        }
-        c.drawRect(getMenu(), getPaint_lila());
-        getPaintBlanco().setTextSize(getAnchoPantalla()/32);
-        c.drawText(context.getText(R.string.button_volver).toString(), getAnchoPantalla()/8, getAltoPantalla()/40, getPaintBlanco());
-        getPaintBlanco().setTextSize(getAnchoPantalla()/16);
+        super.dibuja(c);
 
         int x_Texto = getAnchoPantalla()/32*22;
 
         c.drawBitmap(imagenIdioma, x_imagenes, y_idioma, null);
         getPaint_rosa_claro().setTextSize(getPaintBlanco().getTextSize());
-        c.drawText(context.getText(R.string.boton_cambiarIdioma).toString(), x_Texto, y_idioma+altoImagen/2, getPaint_rosa_claro());
+        c.drawText(getContext().getText(R.string.boton_cambiarIdioma).toString(), x_Texto, y_idioma+altoImagen/2, getPaint_rosa_claro());
         c.drawBitmap(imagenenMusica, x_imagenes, y_musica, null);
-        c.drawText(context.getText(R.string.activar_desactivar).toString(), x_Texto, y_musica+altoImagen/2, getPaint_rosa_claro());
-        c.drawText(context.getText(R.string.musica).toString(), x_Texto, y_musica+altoImagen/2+getAltoPantalla()/64*2, getPaint_rosa_claro());
+        c.drawText(getContext().getText(R.string.activar_desactivar).toString(), x_Texto, y_musica+altoImagen/2, getPaint_rosa_claro());
+        c.drawText(getContext().getText(R.string.musica).toString(), x_Texto, y_musica+altoImagen/2+getAltoPantalla()/64*2, getPaint_rosa_claro());
         c.drawBitmap(imagenSonido, x_imagenes, y_sonido, null);
-        c.drawText(context.getText(R.string.activar_desactivar).toString(), x_Texto, y_sonido+altoImagen/2, getPaint_rosa_claro());
-        c.drawText(context.getText(R.string.sonido).toString(), x_Texto, y_sonido+altoImagen/2+getAltoPantalla()/64*2, getPaint_rosa_claro());
+        c.drawText(getContext().getText(R.string.activar_desactivar).toString(), x_Texto, y_sonido+altoImagen/2, getPaint_rosa_claro());
+        c.drawText(getContext().getText(R.string.sonido).toString(), x_Texto, y_sonido+altoImagen/2+getAltoPantalla()/64*2, getPaint_rosa_claro());
         c.drawBitmap(imagenVibrador, x_imagenes, y_vibrador, null);
-        c.drawText(context.getText(R.string.activar_desactivar).toString(), x_Texto, y_vibrador+altoImagen/2, getPaint_rosa_claro());
-        c.drawText(context.getText(R.string.vibracion).toString(), x_Texto, y_vibrador+altoImagen/2+getAltoPantalla()/64*2, getPaint_rosa_claro());
+        c.drawText(getContext().getText(R.string.activar_desactivar).toString(), x_Texto, y_vibrador+altoImagen/2, getPaint_rosa_claro());
+        c.drawText(getContext().getText(R.string.vibracion).toString(), x_Texto, y_vibrador+altoImagen/2+getAltoPantalla()/64*2, getPaint_rosa_claro());
         getPaint_rosa_claro().setTextSize(getAnchoPantalla()/64*3);
     }
 
@@ -177,25 +142,25 @@ public class EscenaOpciones extends Escenas {
 
                 if (hitboxMusica.contains(xInicial, yInicial)) {
                     if (sp.getBoolean("musica_on", true) == true) {
-                        imagenenMusica = BitmapFactory.decodeResource(context.getResources(), R.drawable.music_off);
+                        imagenenMusica = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.music_off);
                         imagenenMusica = escalaAnchura(imagenenMusica, anchoImagenes);
                         editor.putBoolean("musica_on", false);
                         editor.commit();
 
                     } else {
-                        imagenenMusica = BitmapFactory.decodeResource(context.getResources(), R.drawable.music_on);
+                        imagenenMusica = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.music_on);
                         imagenenMusica = escalaAnchura(imagenenMusica, anchoImagenes);
                         editor.putBoolean("musica_on", true);
                         editor.commit();
                     }
                 }else if(hitboxSonido.contains(xInicial, yInicial)) {
                     if(sp.getBoolean("sonido_on", true) == true){
-                        imagenSonido = BitmapFactory.decodeResource(context.getResources(), R.drawable.sonido_off);
+                        imagenSonido = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.sonido_off);
                         imagenSonido = escalaAnchura(imagenSonido, anchoImagenes);
                         editor.putBoolean("sonido_on", false);
                         editor.commit();
                     }else{
-                        imagenSonido = BitmapFactory.decodeResource(context.getResources(), R.drawable.sonido_on);
+                        imagenSonido = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.sonido_on);
                         imagenSonido = escalaAnchura(imagenSonido, anchoImagenes);
                         editor.putBoolean("sonido_on", true);
                         editor.commit();
@@ -203,12 +168,12 @@ public class EscenaOpciones extends Escenas {
 
                 }else if(hitboxVibrador.contains(xInicial, yInicial)){
                     if(sp.getBoolean("vibracion_on", true) == true){
-                        imagenVibrador = BitmapFactory.decodeResource(context.getResources(), R.drawable.vibration_off);
+                        imagenVibrador = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.vibration_off);
                         imagenVibrador = escalaAnchura(imagenVibrador, anchoImagenes);
                         editor.putBoolean("vibracion_on", false);
                         editor.commit();
                     }else{
-                        imagenVibrador = BitmapFactory.decodeResource(context.getResources(), R.drawable.vibration_on);
+                        imagenVibrador = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.vibration_on);
                         imagenVibrador = escalaAnchura(imagenVibrador, anchoImagenes);
                         editor.putBoolean("vibracion_on", true);
                         editor.commit();
@@ -222,6 +187,6 @@ public class EscenaOpciones extends Escenas {
                 }
                 break;
         }
-        return numEscena;
+        return getNumEscena();
     }
 }

@@ -39,12 +39,12 @@ public class EscenaJuego2 extends Escenas {
     /**
      * Lista que almacena los murciélagos presentes en el juego.
      */
-    private ArrayList<EnemigoMurcielago> murcielagos = new ArrayList<EnemigoMurcielago>();
+    private ArrayList<EnemigoMurcielago> murcielagos;
     /**
      * Murciélagos.
      */
     private EnemigoMurcielago murcielago, murcielago2;
-    ObstaculoPared obstaculo_pared1, obstaculo_pared2, obstaculo_pared3, obstaculo_pared4, obstaculo_pared5;
+//    ObstaculoPared obstaculo_pared1, obstaculo_pared2, obstaculo_pared3, obstaculo_pared4, obstaculo_pared5;
     /**
      * Imágenes del murciélago.
      */
@@ -89,7 +89,7 @@ public class EscenaJuego2 extends Escenas {
     /**
      * Número de la escena.
      */
-    private int numEscena;
+//    private int numEscena;
     /**
      * Imagen de la pared.
      */
@@ -132,7 +132,7 @@ public class EscenaJuego2 extends Escenas {
     /**
      * Contexto de la aplicación.
      */
-    Context context;
+//    Context context;
     /**
      * Tamaño establecido para fijar el mismo ancho y alto a distintos objetos.
      */
@@ -151,7 +151,7 @@ public class EscenaJuego2 extends Escenas {
      */
     Timer timer;
     TimerTask task;
-    int count = 0;
+    int count;
     int minutos = 0;
     int segundos = 0;
 
@@ -211,11 +211,24 @@ public class EscenaJuego2 extends Escenas {
      * Inicializa la escena de juego y configura todos los elementos necesarios.
      */
     public void inicializa() {
+        bitmapColor = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.pared_amarilla);
+        bitmapColorRojo = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.color_rojo);
+
+        pierde = false;
+        gana = false;
+        xInicial = 0;
+        yInicial = 0;
+        xFinal = 0;
+        yFinal = 0;
+        md = false;
+        mi = false;
+        mar = false;
+        mab = false;
+        moviendo = false;
+
         count = 0;
         minutos = 0;
         segundos = 0;
-        pierde = false;
-        gana = false;
 
         timer = new Timer();
         task = new TimerTask() {
@@ -235,24 +248,16 @@ public class EscenaJuego2 extends Escenas {
         };
         timer.schedule(task, 0, 1000);
 
-        xInicial = 0;
-        yInicial = 0;
-        xFinal = 0;
-        yFinal = 0;
-        md = false;
-        mi = false;
-        mar = false;
-        mab = false;
-        moviendo = false;
 
-        sp = context.getSharedPreferences("datos", Context.MODE_PRIVATE);
+
+        sp = getContext().getSharedPreferences("datos", Context.MODE_PRIVATE);
         editor = sp.edit();
 
         editor.putBoolean("nivel1", false);
         editor.putBoolean("nivel2", true);
         editor.commit();
 
-        audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        audioManager = (AudioManager) getContext().getSystemService(Context.AUDIO_SERVICE);
 
         if ((android.os.Build.VERSION.SDK_INT) >= 21) {
             SoundPool.Builder spb = new SoundPool.Builder();
@@ -263,13 +268,13 @@ public class EscenaJuego2 extends Escenas {
         } else {
             this.efecto_sonido = new SoundPool(maxSonidosSimultaneos, AudioManager.STREAM_MUSIC, 0);
         }
-        sonidoWoosh = efecto_sonido.load(context, R.raw.woosh, 1);
-        personaje = new Personaje(context, getAnchoPantalla(), getAltoPantalla(), miAncho * 3, miAlto * 59, 40);
-        puerta = new Puerta(context, getAnchoPantalla(), getAltoPantalla(), miAncho * 27, miAlto * 2, miAncho * 29, miAlto * 4);
-        imagenesMurcielago = BitmapFactory.decodeResource(context.getResources(), R.drawable.enemigo_bat);
+        sonidoWoosh = efecto_sonido.load(getContext(), R.raw.woosh, 1);
+        personaje = new Personaje(getContext(), getAnchoPantalla(), getAltoPantalla(), miAncho * 3, miAlto * 59, 40);
+        puerta = new Puerta(getContext(), getAnchoPantalla(), getAltoPantalla(), miAncho * 27, miAlto * 2, miAncho * 29, miAlto * 4);
+        imagenesMurcielago = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.enemigo_bat);
         murcielagos.clear();
-        murcielago = new EnemigoMurcielago(context, imagenesMurcielago, getAnchoPantalla(), getAltoPantalla(), miAncho * 5, miAlto * 9, 9);
-        murcielago2 = new EnemigoMurcielago(context, imagenesMurcielago, getAnchoPantalla(), getAltoPantalla(), miAncho * 5, miAlto * 19, 6);
+        murcielago = new EnemigoMurcielago(getContext(), imagenesMurcielago, getAnchoPantalla(), getAltoPantalla(), miAncho * 5, miAlto * 9, 9);
+        murcielago2 = new EnemigoMurcielago(getContext(), imagenesMurcielago, getAnchoPantalla(), getAltoPantalla(), miAncho * 5, miAlto * 19, 6);
         murcielagos.add(murcielago);
         murcielagos.add(murcielago2);
         this.menu2 = new Rect(miAncho * 7, miAlto * 40, miAncho * 25, miAlto * 45);
@@ -281,7 +286,7 @@ public class EscenaJuego2 extends Escenas {
 
         CreacionObstaculos();
         CreacionParedes();
-        vibrador = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+        vibrador = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
     }
 
     /**
@@ -375,17 +380,17 @@ public class EscenaJuego2 extends Escenas {
      */
     public EscenaJuego2(Context context, int numEscena, int anp, int alp) {
         super(context, anp, alp, numEscena);
-        this.context = context;
-        this.numEscena = numEscena;
+//        this.context = context;
+//        this.numEscena = numEscena;
         fondo = BitmapFactory.decodeResource(context.getResources(), R.drawable.nivel1_fondo);
         anchoFondo = fondo.getWidth();
         altoFondo = fondo.getHeight();
         fondo = Bitmap.createScaledBitmap(fondo, getAnchoPantalla() * 2, getAltoPantalla(), true);
-        bitmapColor = BitmapFactory.decodeResource(context.getResources(), R.drawable.pared_amarilla);
-        bitmapColorRojo = BitmapFactory.decodeResource(context.getResources(), R.drawable.color_rojo);
 
         paredes = new ArrayList<>();
         obstaculo_paredes = new ArrayList<>();
+        murcielagos = new ArrayList<EnemigoMurcielago>();
+
         inicializa();
     }
 
@@ -406,12 +411,12 @@ public class EscenaJuego2 extends Escenas {
             if (gana) {
                 c.drawRect(new Rect(miAncho * 3, miAlto * 9, miAncho * 29, miAlto * 56), getPaintMagenta());
                 c.drawRect(new Rect(miAncho * 5, miAlto * 12, miAncho * 27, miAlto * 20), getPaintBlanco());
-                c.drawText(context.getText(R.string.gana).toString(), miAncho * 16, miAlto * 16, getPaintNegro());
+                c.drawText(getContext().getText(R.string.gana).toString(), miAncho * 16, miAlto * 16, getPaintNegro());
                 c.drawRect(botonPlayAgain, getPaintBlanco());
-                c.drawText(context.getText(R.string.boton_jugarOtraVez).toString(), miAncho * 16, miAlto * 31, getPaintNegro());
+                c.drawText(getContext().getText(R.string.boton_jugarOtraVez).toString(), miAncho * 16, miAlto * 31, getPaintNegro());
                 c.drawRect(menu2, getPaintBlanco());
-                c.drawText(context.getText(R.string.button_volver_2).toString(), miAncho * 16, miAlto * 43, getPaintNegro());
-                c.drawText(context.getText(R.string.tiempo).toString() + ": " + count, miAncho * 16, miAlto * 52, getPaintNegro());
+                c.drawText(getContext().getText(R.string.button_volver_2).toString(), miAncho * 16, miAlto * 43, getPaintNegro());
+                c.drawText(getContext().getText(R.string.tiempo).toString() + ": " + count, miAncho * 16, miAlto * 52, getPaintNegro());
             } else {
                 for(Pared pared : paredes){
                     pared.dibujar(c);
@@ -425,19 +430,19 @@ public class EscenaJuego2 extends Escenas {
                 puerta.dibujar(c);
                 personaje.dibujar(c);
                 c.drawRect(getMenu(), getPaint_lila());
-                c.drawText(context.getText(R.string.button_volver).toString(), getAnchoPantalla() / 8, getAltoPantalla() / 40, getPaintBlanco());
+                c.drawText(getContext().getText(R.string.button_volver).toString(), getAnchoPantalla() / 8, getAltoPantalla() / 40, getPaintBlanco());
                 String formattedString = String.format("%02d:%02d", minutos, segundos);
                 c.drawText(formattedString, miAncho * 5, miAlto * 5, getPaintBlanco());
             }
         } else {
             c.drawRect(new Rect(miAncho * 3, miAlto * 9, miAncho * 29, miAlto * 56), getPaintMagenta());
             c.drawRect(new Rect(miAncho * 5, miAlto * 12, miAncho * 27, miAlto * 20), getPaintBlanco());
-            c.drawText(context.getText(R.string.pierde).toString(), miAncho * 16, miAlto * 16, getPaintNegro());
+            c.drawText(getContext().getText(R.string.pierde).toString(), miAncho * 16, miAlto * 16, getPaintNegro());
             c.drawRect(botonPlayAgain, getPaintBlanco());
-            c.drawText(context.getText(R.string.boton_jugarOtraVez).toString(), miAncho * 16, miAlto * 31, getPaintNegro());
+            c.drawText(getContext().getText(R.string.boton_jugarOtraVez).toString(), miAncho * 16, miAlto * 31, getPaintNegro());
             c.drawRect(menu2, getPaintBlanco());
-            c.drawText(context.getText(R.string.button_volver_2).toString(), miAncho * 16, miAlto * 43, getPaintNegro());
-            c.drawText(context.getText(R.string.tiempo).toString() + ": " + count, miAncho * 16, miAlto * 52, getPaintNegro());
+            c.drawText(getContext().getText(R.string.button_volver_2).toString(), miAncho * 16, miAlto * 43, getPaintNegro());
+            c.drawText(getContext().getText(R.string.tiempo).toString() + ": " + count, miAncho * 16, miAlto * 52, getPaintNegro());
         }
     }
 
@@ -459,7 +464,7 @@ public class EscenaJuego2 extends Escenas {
                             inicializa();
                             gana = false;
                         }
-                    } else if (numEscena != 1) {
+                    } else if (getNumEscena() != 1) {
                         if (getMenu().contains(xInicial, yInicial)) {
                             return 1;
                         }
@@ -477,7 +482,7 @@ public class EscenaJuego2 extends Escenas {
                 yFinal = (int) event.getY();
 
                 if (pierde || gana) {
-                    if (numEscena != 1) {
+                    if (getNumEscena() != 1) {
                         if (menu2.contains(xInicial, yInicial)) {
                             return 1;
                         }
@@ -525,7 +530,7 @@ public class EscenaJuego2 extends Escenas {
             }
         }
 
-        return numEscena;
+        return getNumEscena();
     }
 
     /**
@@ -538,8 +543,8 @@ public class EscenaJuego2 extends Escenas {
             }
             gana = true;
             setDuracionPartida(count);
-            if (sp.getInt("r1", 0) > count || sp.getInt("r1", 0) == 0) {
-                editor.putInt("r1", count);
+            if (sp.getInt("r2", 0) > count || sp.getInt("r2", 0) == 0) {
+                editor.putInt("r2", count);
                 editor.commit();
             }
         }

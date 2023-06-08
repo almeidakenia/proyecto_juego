@@ -15,18 +15,6 @@ import java.util.Locale;
 
 public class EscenaIdiomas extends Escenas {
     /**
-     * Número que representa la escena de idiomas
-     */
-    private int numEscena;
-    /**
-     * Imagen del fondo de la escena
-     */
-    private Bitmap fondo;
-    /**
-     * Contexto de la aplicación
-     */
-    Context context;
-    /**
      * Imágenes que representan los idioma español e inglés
      */
     private Bitmap imagen_ES, imagen_EN;
@@ -65,10 +53,6 @@ public class EscenaIdiomas extends Escenas {
      */
     public EscenaIdiomas(Context context, int numEscena, int anp, int alp) {
         super(context,  anp, alp, numEscena);
-        this.context = context;
-        this.numEscena=numEscena;
-        fondo = BitmapFactory.decodeResource(context.getResources(), R.drawable.fondo_movil);
-        fondo = Bitmap.createScaledBitmap(fondo, getAnchoPantalla(), getAltoPantalla(), true);
 
         int anchoImagenes = getAnchoPantalla()/32*14;
         imagen_ES = BitmapFactory.decodeResource(context.getResources(), R.drawable.idioma_es);
@@ -95,19 +79,12 @@ public class EscenaIdiomas extends Escenas {
      */
     @Override
     public void dibuja(Canvas c) {
-        try{
-            c.drawBitmap(fondo, 0, 0, null);
-        }catch (Exception e){
-            c.drawColor(Color.MAGENTA);
-        }
-        c.drawRect(getMenu(), getPaintBlanco());
-        c.drawText(context.getText(R.string.button_volver).toString(), getAnchoPantalla()/8, getAltoPantalla()/40, getPaintNegro());
-
+        super.dibuja(c);
         c.drawBitmap(imagen_ES, x_imagenes, y_imagenES, null);
-        c.drawText(context.getText(R.string.esp).toString(), x_imagenes+anchoImagen+getAnchoPantalla()/32*6, y_imagenES+altoImagen/2, getPaintBlanco());
+        c.drawText(getContext().getText(R.string.esp).toString(), x_imagenes+anchoImagen+getAnchoPantalla()/32*6, y_imagenES+altoImagen/2, getPaintBlanco());
 
         c.drawBitmap(imagen_EN, x_imagenes, y_imagenEN, null);
-        c.drawText(context.getText(R.string.eng).toString(), x_imagenes+anchoImagen+getAnchoPantalla()/32*6, y_imagenEN+altoImagen/2, getPaintBlanco());
+        c.drawText(getContext().getText(R.string.eng).toString(), x_imagenes+anchoImagen+getAnchoPantalla()/32*6, y_imagenEN+altoImagen/2, getPaintBlanco());
     }
 
     /**
@@ -115,7 +92,7 @@ public class EscenaIdiomas extends Escenas {
      * @param cod El código del idioma a cambiar.
      */
     public void cambiaIdioma(String cod){
-        Resources res = context.getResources();
+        Resources res = getContext().getResources();
         DisplayMetrics dm = res.getDisplayMetrics();
         android.content.res.Configuration conf = res.getConfiguration();
         conf.locale = new Locale(cod.toLowerCase());
@@ -134,6 +111,11 @@ public class EscenaIdiomas extends Escenas {
 
         switch (event.getAction()){
             case MotionEvent.ACTION_DOWN:
+                if (getNumEscena()!=1){
+                    if (getMenu().contains(x,y)){
+                        return 2;
+                    }
+                }
                 if(hitboxEN.contains(x, y)){
                     cambiaIdioma("EN");
                     return 1;
@@ -143,6 +125,6 @@ public class EscenaIdiomas extends Escenas {
                 }
                 break;
         }
-        return super.onTouchEvent(event);
+        return getNumEscena();
     }
 }
